@@ -18,3 +18,12 @@ export async function insertUser(
   console.log(res);
   return res;
 }
+
+export const getUser = async (email: string) => {
+  const res = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+  return res;
+};

@@ -24,22 +24,35 @@ const Authentication = () => {
     setIsSign((prev) => !prev);
   };
 
-  const validateHandler = async() => {
+  const validateHandler = async () => {
+    const data: Data = {
+      fullName: name.current?.value,
+      email: email.current?.value,
+      password: password.current?.value.toString(),
+    };
     if (!isSign) {
-      const data: Data = {
-        fullName: name.current?.value,
-        email: email.current?.value,
-        password: password.current?.value.toString(),
-      };
       const parsed = authValidationSchema.safeParse(data);
-      console.log(parsed.data)
+      console.log(parsed.data);
       if (!parsed.success) {
-        setError("Invalid input found.")
-        return
+        setError("Invalid input found.");
+        return;
       }
-      setError("")
-      const response =  await axios.post(`${SERVER_URL}/user/signUp`,parsed.data);
-      console.log(response) 
+      setError("");
+      const response = await axios.post(
+        `${SERVER_URL}/user/signUp`,
+        parsed.data,
+      );
+      console.log(response);
+    } else {
+      const parsed = authValidationSchema.safeParse(data);
+      if (!parsed.success) {
+        setError("Invalid input found.");
+        return;
+      }
+      const response = await axios.post(`${SERVER_URL}/user/signIn`, 
+         parsed.data,
+      );
+      console.log(response);
     }
   };
 
@@ -85,7 +98,7 @@ const Authentication = () => {
           <button className="font-semibold text-red-600">
             Forget password?
           </button>
-          <p className=" font-medium text-red-800">{error}</p>
+          <p className="font-medium text-red-800">{error}</p>
           <button
             onClick={validateHandler}
             className="w-[60%] rounded-lg bg-blue-500 p-2 font-Mont font-semibold text-white transition-all duration-300 hover:bg-blue-700 md:w-[75%]"

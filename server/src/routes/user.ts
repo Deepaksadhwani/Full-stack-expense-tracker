@@ -1,5 +1,6 @@
 import express from "express";
-import { insertUser } from "../controllers/userController";
+import { getUser, insertUser } from "../controllers/userController";
+import { authValidationSchema } from "../types";
 
 export const userRouter = express.Router();
 
@@ -14,4 +15,20 @@ userRouter.post("/signUp", async (req, res) => {
   } catch (error) {
     res.status(500).json("Internal server error.");
   }
+});
+
+userRouter.post("/signIn", async (req, res) => {
+  const parsed = authValidationSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(404).json({
+      message: "User does not exist.",
+    });
+  }
+
+  const email = parsed.data.email;
+  const response = await getUser(email);
+  res.status(200).json({
+    message: "logged in successfully.",
+    data: response,
+  });
 });
