@@ -43,16 +43,24 @@ const Authentication = () => {
         parsed.data,
       );
       console.log(response);
-    } else {
+    } // Sign in 
+    else {
       const parsed = authValidationSchema.safeParse(data);
       if (!parsed.success) {
         setError("Invalid input found.");
         return;
       }
-      const response = await axios.post(`${SERVER_URL}/user/signIn`, 
-         parsed.data,
-      );
-      console.log(response);
+      try {
+        const response: any = await axios.post(
+          `${SERVER_URL}/user/signIn`,
+          parsed.data,
+        );
+        console.log(response);
+      } catch (error) {
+        setError("404 User does not exist.");
+      }
+
+      setError("");
     }
   };
 

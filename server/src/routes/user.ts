@@ -1,11 +1,13 @@
 import express from "express";
 import { getUser, insertUser } from "../controllers/userController";
-import { authValidationSchema } from "../types";
+import { authValidationSchema } from "../utils/types";
+import { compareHashPassword, hashPassword } from "../utils/bycrypt";
 
 export const userRouter = express.Router();
 
 userRouter.post("/signUp", async (req, res) => {
-  const { fullName, password, email } = req.body;
+  let { fullName, password, email } = req.body;
+  password = await hashPassword(password, 10);
   try {
     const response = await insertUser(email, password, fullName);
     res.status(201).json({
@@ -24,11 +26,26 @@ userRouter.post("/signIn", async (req, res) => {
       message: "User does not exist.",
     });
   }
-
   const email = parsed.data.email;
+  const plainPassword = parsed.data.password;
   const response = await getUser(email);
-  res.status(200).json({
-    message: "logged in successfully.",
-    data: response,
-  });
+  if (response) {
+    const hashedPassword = response?.password;
+    const isValid = await compareHashPassword(
+      plainPassword,
+      response?.password
+    );
+    if (isValid) {
+      res.status(200).json({
+        message: "logged in successfully.",
+        data: { email, password: hashedPassword },
+      });
+    } else {
+      res.status(401).json({ message: "Invalid Password." });
+    }
+  } else {
+    res.status(404).json({
+      message: "User does not exist.",
+    });
+  }
 });
