@@ -16,7 +16,7 @@ const Authentication = () => {
   };
 
   const bgColor = isSign
-    ? "flex w-[90%]  flex-col  items-center space-y-3 rounded-md border-2 border-gray-200 bg-white py-20 shadow-md shadow-black  md:mb-[%]   md:w-[20%] md:py-[42px]  "
+    ? "flex w-[90%]  flex-col  items-center space-y-3 rounded-md border-2 border-gray-200 bg-white py-20 shadow-md shadow-black  md:mb-[%]   lg:w-[20%] md:py-[42px]  "
     : "flex w-[90%]  flex-col  items-center space-y-3 rounded-md border-2 border-gray-200 bg-gray-900 py-20 shadow-md shadow-black  md:mb-[%]   md:w-[20%] md:py-4 ";
 
   return isLoading ? (
