@@ -1,21 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import express from "express";
+import { rootRouter } from "./routes";
+import cors from "cors";
+const app = express();
 
-const prisma = new PrismaClient();
+app.use(cors());
+app.use(express.json());
+app.use("/api/v1", rootRouter);
 
-/// insert user
-async function insertUser(
-  username: string,
-  password: string,
-  fullName: string
-) {
-  const res = await prisma.user.create({
-    data: {
-      email: username,
-      password,
-      fullName,
-    },
-  
-  });
-  console.log(res);
-}
-
+app.listen(3000);
