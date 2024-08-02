@@ -56,11 +56,12 @@ const Authentication = () => {
           parsed.data,
         );
         console.log(response);
+        setError("")
       } catch (error) {
+        console.log("fail")
         setError("404 User does not exist.");
       }
-
-      setError("");
+      
     }
   };
 
