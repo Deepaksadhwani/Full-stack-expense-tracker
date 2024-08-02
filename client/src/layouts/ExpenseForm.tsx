@@ -1,4 +1,5 @@
 import Shimmer from "@/components/Shimmer";
+import useInsertExpense from "@/hooks/useInsertExpense";
 import { useRef, useState } from "react";
 
 const ExpenseForm = ({}) => {
@@ -10,13 +11,24 @@ const ExpenseForm = ({}) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const parsedAmount: number = parseInt(amount.current?.value || "0");
+    const parsedDate: Date = new Date(date.current?.value || new Date());
+    const expenseEntry: any = {
+      amount: parsedAmount,
+      description: description.current?.value ?? "",
+      category: category.current?.value ?? "",
+      date: parsedDate,
+      userId: 1,
+    };
+    console.log(expenseEntry);
+    useInsertExpense(expenseEntry, setLoading);
   };
 
   return loading ? (
     <Shimmer />
   ) : (
     <div className="mx-auto mb-5 mt-5 max-w-4xl rounded-lg bg-white">
-      <h2 className="mb-6 py-2 text-center bg-gradient-to-r from-red-500 via-yellow-600 bg-clip-text text-transparent to-orange-500 text-3xl font-semibold text-gray-800">
+      <h2 className="mb-6 bg-gradient-to-r from-red-500 via-yellow-600 to-orange-500 bg-clip-text py-2 text-center text-3xl font-semibold text-gray-800 text-transparent">
         Enter Expense
       </h2>
       <form
@@ -67,7 +79,7 @@ const ExpenseForm = ({}) => {
         </div>
 
         <button
-          className="focus:shadow-outline mt-4 mb-1 rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none"
+          className="focus:shadow-outline mb-1 mt-4 rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none"
           type="submit"
         >
           Submit
