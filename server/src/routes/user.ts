@@ -1,7 +1,11 @@
 import express from "express";
 import { getUser, insertUser } from "../controllers/userController";
 import { authValidationSchema } from "../utils/types";
-import { compareHashPassword, hashPassword } from "../utils/bycrypt";
+import {
+  compareHashPassword,
+  generateToken,
+  hashPassword,
+} from "../utils/securityHelpers";
 
 export const userRouter = express.Router();
 
@@ -10,9 +14,12 @@ userRouter.post("/signUp", async (req, res) => {
   password = await hashPassword(password, 10);
   try {
     const response = await insertUser(email, password, fullName);
+    const { id } = response;
+    const token = generateToken(id);
+
     res.status(201).json({
       message: "you account is successfully created.",
-      data: response,
+      data: { email, token },
     });
   } catch (error) {
     res.status(500).json("Internal server error.");
@@ -31,14 +38,13 @@ userRouter.post("/signIn", async (req, res) => {
   const response = await getUser(email);
   if (response) {
     const hashedPassword = response?.password;
-    const isValid = await compareHashPassword(
-      plainPassword,
-      response?.password
-    );
+    const isValid = await compareHashPassword(plainPassword, hashedPassword);
     if (isValid) {
+      const { id } = response;
+      const token = generateToken(id);
       res.status(200).json({
         message: "logged in successfully.",
-        data: { email, password: hashedPassword },
+        data: { email, token },
       });
     } else {
       res.status(401).json({ message: "Invalid Password." });

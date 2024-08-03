@@ -1,6 +1,6 @@
 import Shimmer from "@/components/Shimmer";
 import TypingAnimation from "@/components/TypingAnimation";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import bg1 from "/src/assets/bg1.png";
 import { authValidationSchema } from "@/utils/types";
 import axios from "axios";
@@ -38,12 +38,16 @@ const Authentication = () => {
         return;
       }
       setError("");
-      const response = await axios.post(
-        `${SERVER_URL}/user/signUp`,
-        parsed.data,
-      );
-      console.log(response);
-    } // Sign in 
+      try {
+        const response = await axios.post(
+          `${SERVER_URL}/user/signUp`,
+          parsed.data,
+        );
+        console.log(response);
+      } catch (error) {
+        setError("User already exists.");
+      }
+    } // Sign in
     else {
       const parsed = authValidationSchema.safeParse(data);
       if (!parsed.success) {
@@ -56,12 +60,11 @@ const Authentication = () => {
           parsed.data,
         );
         console.log(response);
-        setError("")
+        setError("");
       } catch (error) {
-        console.log("fail")
+        console.log("fail");
         setError("404 User does not exist.");
       }
-      
     }
   };
 
