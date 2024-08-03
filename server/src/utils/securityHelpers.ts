@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { number } from "zod";
 dotenv.config({ path: ".env" });
 export async function hashPassword(password: string, saltRound: number) {
   const hashedPassword = await bcrypt.hash(password, saltRound);
@@ -22,9 +21,9 @@ export const generateToken = (id: number) => {
   return jwt.sign({ id }, secretKey);
 };
 
-export const verifyToken = (id: number) => {
+export const verifyToken = (token: string) => {
   try {
-    return jwt.sign({ id }, secretKey);
+    return jwt.verify(token, secretKey);
   } catch (error) {
     return null;
   }

@@ -15,7 +15,6 @@ export async function insertUser(
       password,
     },
   });
-  console.log(res);
   return res;
 }
 

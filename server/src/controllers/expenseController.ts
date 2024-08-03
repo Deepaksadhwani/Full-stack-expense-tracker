@@ -7,7 +7,7 @@ interface ExpenseData {
   description: string;
   category: string;
   date: string;
-  userId: number;
+  userId: any;
 }
 
 export const insertExpense = async (expense: ExpenseData) => {
@@ -21,6 +21,14 @@ export const insertExpense = async (expense: ExpenseData) => {
       userId: expense.userId,
     },
   });
-  console.log(res);
+  return res;
+};
+
+export const fetchUserExpenses = async (id: number) => {
+  const res = await prisma.expense.findMany({
+    where: {
+      userId: id,
+    },
+  });
   return res;
 };

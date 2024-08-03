@@ -18,7 +18,6 @@ const useInsertExpense = (
       `${SERVER_URL}/user/expense/insertExpense`,
       expenseData,
     );
-    console.log(response);
     setLoading(false);
   };
 

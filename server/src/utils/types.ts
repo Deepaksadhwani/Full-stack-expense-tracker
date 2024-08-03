@@ -10,5 +10,5 @@ export const expenseEntrySchema = z.object({
   description: z.string(),
   category: z.string(),
   date: z.string(),
-  userId: z.number(),
+  userId: z.string() ,
 });

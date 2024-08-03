@@ -20,7 +20,6 @@ const ExpenseForm = ({}) => {
       date: parsedDate,
       userId: 1,
     };
-    console.log(expenseEntry);
     useInsertExpense(expenseEntry, setLoading);
   };
 

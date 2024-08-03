@@ -32,7 +32,6 @@ const Authentication = () => {
     };
     if (!isSign) {
       const parsed = authValidationSchema.safeParse(data);
-      console.log(parsed.data);
       if (!parsed.success) {
         setError("Invalid input found.");
         return;
@@ -43,7 +42,6 @@ const Authentication = () => {
           `${SERVER_URL}/user/signUp`,
           parsed.data,
         );
-        console.log(response);
       } catch (error) {
         setError("User already exists.");
       }
@@ -59,10 +57,8 @@ const Authentication = () => {
           `${SERVER_URL}/user/signIn`,
           parsed.data,
         );
-        console.log(response);
         setError("");
       } catch (error) {
-        console.log("fail");
         setError("404 User does not exist.");
       }
     }
