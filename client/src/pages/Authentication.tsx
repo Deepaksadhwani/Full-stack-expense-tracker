@@ -1,10 +1,13 @@
 import Shimmer from "@/components/Shimmer";
 import TypingAnimation from "@/components/TypingAnimation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import bg1 from "/src/assets/bg1.png";
 import { authValidationSchema } from "@/utils/types";
 import axios from "axios";
 import { SERVER_URL } from "@/utils/constants";
+import { useDispatch } from "react-redux";
+import { addToken, setUserData } from "@/store/slices/userSlice";
+import { useNavigate } from "react-router-dom";
 
 interface Data {
   fullName?: string;
@@ -19,6 +22,9 @@ const Authentication = () => {
   const password = useRef<HTMLInputElement>(null);
   const [isSign, setIsSign] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  
 
   const toggleSignInForm = () => {
     setIsSign((prev) => !prev);
@@ -38,10 +44,15 @@ const Authentication = () => {
       }
       setError("");
       try {
-        const response = await axios.post(
+        const response: any = await axios.post(
           `${SERVER_URL}/user/signUp`,
           parsed.data,
         );
+        dispatch(setUserData(response.data.data));
+        const token = response.headers["authorization"]?.split(" ")[1];
+        localStorage.setItem("token", token);
+        localStorage.setItem("userData", JSON.stringify(response.data.data));
+        navigate("/")
       } catch (error) {
         setError("User already exists.");
       }
@@ -57,12 +68,28 @@ const Authentication = () => {
           `${SERVER_URL}/user/signIn`,
           parsed.data,
         );
+        const token = response.headers["authorization"]?.split(" ")[1];
+        dispatch(setUserData(response.data.data));
+        localStorage.setItem("token", token);
+        localStorage.setItem("userData", JSON.stringify(response.data.data));
+        navigate("/")
         setError("");
       } catch (error) {
         setError("404 User does not exist.");
       }
     }
   };
+
+  
+  useEffect(() => {
+    const userToken = localStorage.getItem("token");
+
+    if (userToken) {
+      dispatch(addToken(userToken));
+      navigate("/");
+    }
+  }, []);
+
 
   const bgColor = isSign
     ? "flex w-[90%]  flex-col  items-center space-y-3 rounded-md border-2 border-gray-200 bg-white py-20 shadow-md shadow-black lg:w-[20%] md:py-[42px]  "

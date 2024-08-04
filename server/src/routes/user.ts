@@ -14,12 +14,12 @@ userRouter.post("/signUp", async (req, res) => {
   password = await hashPassword(password, 10);
   try {
     const response = await insertUser(email, password, fullName);
-    const { id } = response;
+    const { fullName: name, id } = response;
     const token = generateToken(id);
     res.setHeader("Authorization", `Bearer ${token}`);
     res.status(201).json({
       message: "you account is successfully created.",
-      data: { email },
+      data: { name, email },
     });
   } catch (error) {
     res.status(500).json("Internal server error.");
@@ -40,12 +40,12 @@ userRouter.post("/signIn", async (req, res) => {
     const hashedPassword = response?.password;
     const isValid = await compareHashPassword(plainPassword, hashedPassword);
     if (isValid) {
-      const { id } = response;
+      const { id, fullName } = response;
       const token = generateToken(id);
       res.setHeader("Authorization", `Bearer ${token}`);
       res.status(200).json({
         message: "logged in successfully.",
-        data: { email },
+        data: { fullName, email },
       });
     } else {
       res.status(401).json({ message: "Invalid Password." });
