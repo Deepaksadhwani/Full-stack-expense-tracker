@@ -25,7 +25,8 @@ expenseRouter.post("/insertExpense", async (req, res) => {
 });
 
 expenseRouter.get("/accessExpenses", async (req, res) => {
-  const token: any = req.headers["user-auth-token"]; // always access header information in lowercase even client send uppercase
+  const authtoken: any = req.headers["user-auth-token"]; // always access header information in lowercase even client send uppercase
+  const token: string = authtoken.split(" ")[1];
   if (token) {
     const userData = verifyToken(token);
 

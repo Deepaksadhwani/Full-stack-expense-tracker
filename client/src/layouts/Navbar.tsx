@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import NavLogo from "/src/assets/navlogo.jpeg";
 import Shimmer from "../components/Shimmer";
-
+import { useDispatch } from "react-redux";
+import { removeToken, removeUserData } from "@/store/slices/userSlice";
+import DropDownMenu from "@/components/DropDownMenu";
+import { AppDispatch } from "@/store/appStore";
+import { removeExpense } from "@/store/slices/expenseSlice";
 const Navbar = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [displayName, setDisplayName] = useState<string>("Profile");
 
   const activeClass = "text-yellow-400";
-
   const [toggleHamburger, setToggleHamburger] = useState(false);
 
   const image = NavLogo;
@@ -17,9 +22,14 @@ const Navbar = () => {
   const logoutHandler = () => {
     setLoading(true);
     const timer = setTimeout(() => {
+      localStorage.clear();
+      dispatch(removeUserData());
+      dispatch(removeToken());
+      dispatch(removeExpense());
       navigate("/");
       setLoading(false);
-    }, 700);
+    }, 500);
+    return () => clearTimeout(timer);
   };
 
   const handleDownloadExpenseFile = () => {
@@ -41,6 +51,14 @@ const Navbar = () => {
     // document.body.removeChild(link);
   };
 
+  useEffect(() => {
+    const userDataStr = localStorage.getItem("userData");
+    if (userDataStr) {
+      const userData = JSON.parse(userDataStr);
+      setDisplayName(userData.fullName);
+      console.log(userData.fullName);
+    }
+  }, []);
   return loading ? (
     <Shimmer />
   ) : (
@@ -55,14 +73,7 @@ const Navbar = () => {
           Expense Tracker
         </h1>
       </div>
-      {/* {!loading && expenseData && (
-        <button
-          className="hidden rounded-lg bg-blue-500 p-2 font-bold text-white transition-all duration-300 hover:bg-blue-700 sm:block"
-          onClick={handleDownloadExpenseFile}
-        >
-          Download Expense File
-        </button>
-      )} */}
+
       <div className="flex items-center space-x-3 text-xl font-semibold text-white">
         <NavLink
           to="/"
@@ -79,7 +90,7 @@ const Navbar = () => {
           onClick={() => setIsOpen((prev) => !prev)}
           className="group/testing hidden cursor-pointer select-none items-center space-x-3 rounded-md border-2 border-black bg-yellow-300 px-3 py-3 font-semibold text-[#00215E] transition-all duration-200 hover:scale-[1.04] sm:flex"
         >
-          {/* <p className="">{displayName}</p> */}
+          <p className="">{displayName}</p>
           <span className="duration-700 group-hover/testing:rotate-180">⮟</span>
         </div>
         <div>

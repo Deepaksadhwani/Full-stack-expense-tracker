@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { Navigate, Outlet } from "react-router-dom";
 import Navbar from "./layouts/Navbar";

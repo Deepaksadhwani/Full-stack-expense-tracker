@@ -6,7 +6,7 @@ interface DataType {
   description: string;
   category: string;
   date: string;
-  userId: number;
+  userId: string;
 }
 const useInsertExpense = (
   expenseData: DataType,
@@ -18,6 +18,7 @@ const useInsertExpense = (
       `${SERVER_URL}/user/expense/insertExpense`,
       expenseData,
     );
+    console.log(response)
     setLoading(false);
   };
 

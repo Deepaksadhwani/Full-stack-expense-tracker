@@ -2,6 +2,7 @@ import Shimmer from "@/components/Shimmer";
 import useInsertExpense from "@/hooks/useInsertExpense";
 import { useRef, useState } from "react";
 
+const token = localStorage.getItem("token");
 const ExpenseForm = ({}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const amount = useRef<HTMLInputElement>(null);
@@ -18,7 +19,7 @@ const ExpenseForm = ({}) => {
       description: description.current?.value ?? "",
       category: category.current?.value ?? "",
       date: parsedDate,
-      userId: 1,
+      userId: token,
     };
     useInsertExpense(expenseEntry, setLoading);
   };
@@ -27,9 +28,6 @@ const ExpenseForm = ({}) => {
     <Shimmer />
   ) : (
     <div className="mx-auto mb-5 mt-5 max-w-4xl rounded-lg bg-white">
-      <h2 className="mb-6 bg-gradient-to-r from-red-500 via-yellow-600 to-orange-500 bg-clip-text py-2 text-center text-3xl font-semibold text-gray-800 text-transparent">
-        Enter Expense
-      </h2>
       <form
         onSubmit={handleSubmit}
         className="flex flex-wrap items-center justify-center rounded-lg shadow-xl"
