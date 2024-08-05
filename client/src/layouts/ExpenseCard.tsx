@@ -1,37 +1,68 @@
+import { AppDispatch } from "@/store/appStore";
+import { deleteExpense, updateExpense } from "@/store/slices/expenseSlice";
+import { SERVER_URL } from "@/utils/constants";
+import axios from "axios";
 import { FC, useRef } from "react";
-
-const token = localStorage.getItem("token");
+import { useDispatch } from "react-redux";
 
 interface DataType {
   amount: number;
   description: string;
   category: string;
   date: string;
+  id: number;
 }
 
-const ExpenseCard: FC<DataType> = ({ amount, date, category, description }) => {
+const ExpenseCard: FC<DataType> = ({
+  id,
+  amount,
+  date,
+  category,
+  description,
+}) => {
   const amountRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLInputElement>(null);
   const categoryRef = useRef<HTMLInputElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
-  const editFormRef = useRef<any>(null);
-  const deleteExpenseEntry = () => {
-    //  useDeleteExpenseData(id, email);
-
-    setTimeout(() => {
-      //  useGetExpenseData(dispatch, onSetExpenseData, email);
-    }, 500);
+  const editFormRef = useRef<HTMLFormElement>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const deleteExpenseEntry = async () => {
+    dispatch(deleteExpense(id));
   };
 
-  const editExpenseDataHandler = () => {
-    editFormRef.current.style.display = "block";
+  const editExpenseDataHandler = async () => {
+    if (
+      !amountRef.current ||
+      !descriptionRef.current ||
+      !categoryRef.current ||
+      !dateRef.current
+    ) {
+      console.error("Form references are missing");
+      return;
+    }
+
+    const amountValue: number = parseFloat(amountRef.current.value);
+    const dateValue: string = new Date(dateRef.current.value).toISOString();
+    const expenseData = {
+      amount: amountValue,
+      description: descriptionRef.current.value,
+      date: dateValue,
+      category: categoryRef.current.value,
+    };
+
+    try {
+      dispatch(updateExpense({ expenseData, id }));
+      if (editFormRef.current) {
+        editFormRef.current.style.display = "none";
+      }
+    } catch (error) {
+      console.error("Error updating expense:", error);
+    }
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    editFormRef.current.style.display = "none";
-    setTimeout(() => {}, 500);
+    editExpenseDataHandler();
   };
 
   return (
@@ -60,7 +91,7 @@ const ExpenseCard: FC<DataType> = ({ amount, date, category, description }) => {
           ref={dateRef}
           type="date"
           className="mb-2 w-full rounded-lg border px-3 py-2"
-          defaultValue={date}
+          defaultValue={new Date(date).toISOString().slice(0, 10)} // Format date correctly for input
           placeholder="Date"
         />
         <input
@@ -78,7 +109,11 @@ const ExpenseCard: FC<DataType> = ({ amount, date, category, description }) => {
         </button>
         <button
           type="button"
-          onClick={() => (editFormRef.current.style.display = "none")}
+          onClick={() => {
+            if (editFormRef.current) {
+              editFormRef.current.style.display = "none";
+            }
+          }}
           className="rounded-lg bg-gray-500 px-4 py-2 font-semibold text-white hover:bg-gray-600"
         >
           Cancel
@@ -86,12 +121,12 @@ const ExpenseCard: FC<DataType> = ({ amount, date, category, description }) => {
       </form>
       <div className="px-6 py-4">
         <div className="mb-2 text-xl font-bold text-indigo-500">{category}</div>
-        <p className="text-base text-gray-700">{description}</p>
+        <p className="text-lg text-gray-700">{description}</p>
       </div>
       <div className="flex items-center justify-between bg-gray-100 px-6 py-4">
         <div>
           <p className="text-gray-600">Date</p>
-          <p className="font-semibold text-gray-800">{date.slice(0,10)}</p>
+          <p className="font-semibold text-gray-800">{date.slice(0, 10)}</p>
         </div>
         <div className="text-right">
           <p className="text-gray-600">Amount</p>
@@ -100,7 +135,11 @@ const ExpenseCard: FC<DataType> = ({ amount, date, category, description }) => {
       </div>
       <div className="flex justify-start bg-gray-50 px-6 py-4">
         <button
-          onClick={editExpenseDataHandler}
+          onClick={() => {
+            if (editFormRef.current) {
+              editFormRef.current.style.display = "block";
+            }
+          }}
           className="mr-2 rounded-lg bg-indigo-500 px-4 py-2 font-semibold text-white hover:bg-indigo-600"
         >
           Edit

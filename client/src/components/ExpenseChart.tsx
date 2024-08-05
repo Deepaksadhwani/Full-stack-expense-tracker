@@ -1,11 +1,6 @@
 import React, { FC } from "react";
 import { Label, Pie, PieChart } from "recharts";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,

@@ -1,6 +1,9 @@
 import Shimmer from "@/components/Shimmer";
 import useInsertExpense from "@/hooks/useInsertExpense";
+import { AppDispatch } from "@/store/appStore";
+import { insertExpense } from "@/store/slices/expenseSlice";
 import { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const token = localStorage.getItem("token");
 const ExpenseForm = ({}) => {
@@ -9,6 +12,7 @@ const ExpenseForm = ({}) => {
   const description = useRef<HTMLInputElement>(null);
   const category = useRef<HTMLSelectElement>(null);
   const date = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,7 +25,7 @@ const ExpenseForm = ({}) => {
       date: parsedDate,
       userId: token,
     };
-    useInsertExpense(expenseEntry, setLoading);
+    dispatch(insertExpense(expenseEntry));
   };
 
   return loading ? (

@@ -1,5 +1,5 @@
 import { SERVER_URL } from "@/utils/constants";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 const token = localStorage.getItem("token");
 
@@ -13,8 +13,50 @@ export const fetchExpenseData = createAsyncThunk("fetchExpense", async () => {
     `${SERVER_URL}/user/expense/accessExpenses`,
     config,
   );
+  console.log(response);
   return response.data.data;
 });
+
+export const deleteExpense = createAsyncThunk(
+  "deleteExpense",
+  async (id: number) => {
+    const response = await axios.delete(
+      `${SERVER_URL}/user/expense/deleteExpense/${id}`,
+    );
+    return id;
+  },
+);
+interface DataType {
+  amount: number;
+  description: string;
+  category: string;
+  date: string;
+  userId: string;
+}
+
+interface UpdateExpensePayload {
+  expenseData: any;
+  id: number;
+}
+
+export const insertExpense = createAsyncThunk(
+  "insertExpense",
+  async (expenseData: DataType, { dispatch }) => {
+    await axios.post(`${SERVER_URL}/user/expense/insertExpense`, expenseData);
+    dispatch(fetchExpenseData());
+  },
+);
+
+export const updateExpense = createAsyncThunk(
+  "updateExpense",
+  async ({ expenseData, id }: UpdateExpensePayload, { dispatch }) => {
+    await axios.put(
+      `${SERVER_URL}/user/expense/updateExpense/${id}`,
+      expenseData,
+    );
+    dispatch(fetchExpenseData());
+  },
+);
 
 interface ExpenseState {
   isLoading: boolean;
@@ -46,6 +88,27 @@ const expenseSlice = createSlice({
       }),
       builder.addCase(fetchExpenseData.rejected, (state) => {
         state.isError = true;
+      }),
+      builder.addCase(deleteExpense.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data = state.data.filter(
+          (expense: any) => expense.id !== action.payload,
+        );
+      }),
+      builder.addCase(deleteExpense.pending, (state) => {
+        state.isLoading = true;
+      }),
+      builder.addCase(insertExpense.fulfilled, (state) => {
+        state.isLoading = false;
+      }),
+      builder.addCase(insertExpense.pending, (state) => {
+        state.isLoading = true;
+      }),
+      builder.addCase(updateExpense.fulfilled, (state) => {
+        state.isLoading = false;
+      }),
+      builder.addCase(updateExpense.pending, (state) => {
+        state.isLoading = true;
       });
   },
 });

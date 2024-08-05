@@ -31,14 +31,14 @@ export function ExpenseBarChart({expenseData} : {expenseData:any}) {
   console.log(expenseData);
 
   return (
-    <ChartContainer config={chartConfig} className="">
+    <ChartContainer config={chartConfig} className="shadow-md">
       <BarChart data={expenseData}>
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="date"
           tickLine={true}
           tickMargin={10}
-          axisLine={false}
+          axisLine={true}
           tickFormatter={(value) => value.slice(0, 10)}
         />
         <Tooltip content={<ChartTooltipContent nameKey="amount" />} />
