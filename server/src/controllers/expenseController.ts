@@ -29,6 +29,14 @@ export const fetchUserExpenses = async (id: number) => {
     where: {
       userId: id,
     },
+    select: {
+      id: true,
+      amount: true,
+      description: true,
+      category: true,
+      date: true,
+    }
+    
   });
   return res;
 };

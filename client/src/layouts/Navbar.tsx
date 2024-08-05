@@ -7,6 +7,8 @@ import { removeToken, removeUserData } from "@/store/slices/userSlice";
 import DropDownMenu from "@/components/DropDownMenu";
 import { AppDispatch } from "@/store/appStore";
 import { removeExpense } from "@/store/slices/expenseSlice";
+import { fetchExpenseData } from "@/store/slices/expenseSlice";
+
 const Navbar = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -52,6 +54,7 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    dispatch(fetchExpenseData());
     const userDataStr = localStorage.getItem("userData");
     if (userDataStr) {
       const userData = JSON.parse(userDataStr);
