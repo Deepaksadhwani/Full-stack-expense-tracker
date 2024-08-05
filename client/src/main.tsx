@@ -6,12 +6,14 @@ import appStore from "./store/appStore.ts";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.tsx";
 import Authentication from "./pages/Authentication.tsx";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={appStore}>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
+
         </Route>
         <Route path="/Authentication" element={<Authentication />} />
       </Routes>

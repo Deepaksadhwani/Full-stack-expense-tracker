@@ -31,7 +31,6 @@ expenseRouter.get("/accessExpenses", async (req, res) => {
   const token: string = authtoken.split(" ")[1];
   if (token) {
     const userData = verifyToken(token);
-
     const { id }: any = userData;
 
     const response = await fetchUserExpenses(id);

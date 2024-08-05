@@ -107,14 +107,7 @@ const Navbar = () => {
         {toggleHamburger && (
           <div className="z-100 absolute top-20 flex cursor-pointer items-center justify-center rounded-lg border-2 border-black bg-gradient-to-bl from-gray-200 via-gray-300 to-gray-200 py-2 text-gray-700 shadow-md sm:hidden">
             <ul>
-              <li className="border-b-2 border-gray-700 px-2">
-                <Link to="/ProfilePage">Profile</Link>
-              </li>
-
-              <li className="border-b-2 border-gray-700 px-2">
-                <Link to="/EmailVerification">Verify Email</Link>
-              </li>
-
+            
               <li
                 onClick={handleDownloadExpenseFile}
                 className="min-w-60 border-b-2 border-gray-700"
@@ -130,8 +123,6 @@ const Navbar = () => {
         {isOpen && (
           <DropDownMenu
             onLogOutHandler={logoutHandler}
-            ontoggleDropMenu={setIsOpen}
-            navigate={navigate}
           />
         )}
       </div>
