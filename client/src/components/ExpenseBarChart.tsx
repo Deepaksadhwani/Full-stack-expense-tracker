@@ -27,8 +27,7 @@ interface ExpenseItem {
   date: string;
 }
 
-export function ExpenseBarChart() {
-  const expenseData = useSelector((state: RootState) => state.expense.data) as ExpenseItem[];
+export function ExpenseBarChart({expenseData} : {expenseData:any}) {
   console.log(expenseData);
 
   return (

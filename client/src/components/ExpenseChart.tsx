@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { FC } from "react";
 import { Label, Pie, PieChart } from "recharts";
 import {
   Card,
@@ -12,10 +12,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/appStore";
 
-const chartConfig: any = {
+const chartConfig: ChartConfig = {
   food: {
     label: "Food",
     color: "hsl(var(--chart-1))",
@@ -28,15 +26,24 @@ const chartConfig: any = {
     label: "Other",
     color: "hsl(var(--chart-3))",
   },
-} satisfies ChartConfig;
+};
 
-export function ExpenseChart() {
-  const expenseData = useSelector((state: RootState) => state.expense.data);
+interface DataType {
+  id: number;
+  amount: number;
+  description: string;
+  category: string;
+  date: string;
+}
 
-  // Aggregate expenses by category
+interface ExpenseChartProps {
+  expenseData: DataType[];
+}
+
+export const ExpenseChart: FC<ExpenseChartProps> = ({ expenseData }) => {
   const categoryData = React.useMemo(() => {
     const result: { [key: string]: number } = {};
-    expenseData.forEach((item: any) => {
+    expenseData.forEach((item) => {
       if (result[item.category]) {
         result[item.category] += item.amount;
       } else {
@@ -51,12 +58,12 @@ export function ExpenseChart() {
   }, [expenseData]);
 
   const totalAmount = React.useMemo(() => {
-    return expenseData.reduce((acc: number, curr: any) => acc + curr.amount, 0);
+    return expenseData.reduce((acc, curr) => acc + curr.amount, 0);
   }, [expenseData]);
 
   return (
-    <Card className="flex flex-col  bg-">
-      <CardHeader className="items-center  pb-0">
+    <Card className="flex flex-col bg-white">
+      <CardHeader className="items-center pb-0">
         <CardTitle>Total Expense Chart</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
@@ -103,6 +110,7 @@ export function ExpenseChart() {
                       </text>
                     );
                   }
+                  return null;
                 }}
               />
             </Pie>
@@ -111,4 +119,4 @@ export function ExpenseChart() {
       </CardContent>
     </Card>
   );
-}
+};
