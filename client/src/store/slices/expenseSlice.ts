@@ -1,17 +1,17 @@
 import { SERVER_URL } from "@/utils/constants";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-const token = localStorage.getItem("token");
 
-const config = {
-  headers: {
-    "user-auth-token": `Bearer ${token}`,
-  },
-};
 export const fetchExpenseData = createAsyncThunk("fetchExpense", async () => {
+  const token = localStorage.getItem("token");
+
   const response = await axios.get(
     `${SERVER_URL}/user/expense/accessExpenses`,
-    config,
+    {
+      headers: {
+        "user-auth-token": `Bearer ${token}`,
+      },
+    },
   );
   console.log(response);
   return response.data.data;

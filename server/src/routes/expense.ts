@@ -30,9 +30,11 @@ expenseRouter.get("/accessExpenses", async (req, res) => {
   const authtoken: any = req.headers["user-auth-token"]; // always access header information in lowercase even client send uppercase
   const token: string = authtoken.split(" ")[1];
   if (token) {
+    console.log("token", token)
     const userData = verifyToken(token);
+    console.log("userdata", userData)
     const { id }: any = userData;
-
+    console.log("access", id)
     const response = await fetchUserExpenses(id);
     res
       .status(200)
