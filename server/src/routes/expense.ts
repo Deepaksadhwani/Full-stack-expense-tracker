@@ -6,13 +6,16 @@ import {
   insertExpense,
   updateExpense,
 } from "../controllers/expenseController";
-import { verifyToken } from "../utils/securityHelpers";
+import { authenticateToken, verifyToken } from "../utils/securityHelpers";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
 export const expenseRouter = express.Router();
 
+expenseRouter.use(authenticateToken);
+
 expenseRouter.post("/insertExpense", async (req, res) => {
   const parsed = expenseEntrySchema.safeParse(req.body);
+
   if (parsed.success) {
     const token: any = verifyToken(parsed.data.userId);
     parsed.data.userId = token.id;
@@ -28,13 +31,16 @@ expenseRouter.post("/insertExpense", async (req, res) => {
 
 expenseRouter.get("/accessExpenses", async (req, res) => {
   const authtoken: any = req.headers["user-auth-token"]; // always access header information in lowercase even client send uppercase
+  if (!authtoken) {
+    return res.status(401).json({ message: "authorization is not accessed" });
+  }
   const token: string = authtoken.split(" ")[1];
   if (token) {
-    console.log("token", token)
+    console.log("token", token);
     const userData = verifyToken(token);
-    console.log("userdata", userData)
+    console.log("userdata", userData);
     const { id }: any = userData;
-    console.log("access", id)
+    console.log("access", id);
     const response = await fetchUserExpenses(id);
     res
       .status(200)
