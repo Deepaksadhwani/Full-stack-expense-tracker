@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import NavLogo from "/src/assets/navlogo.jpeg";
 import Shimmer from "../components/Shimmer";
 import { useDispatch } from "react-redux";
@@ -16,7 +16,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState<string>("Profile");
 
-  const activeClass = "text-yellow-400";
+  // const activeClass = "text-yellow-400";
   const [toggleHamburger, setToggleHamburger] = useState(false);
 
   const image = NavLogo;
@@ -78,13 +78,19 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center space-x-3 text-xl font-semibold text-white">
-        <NavLink
+        {/* <NavLink
           to="/"
           className={({ isActive }) => (isActive ? activeClass : undefined)}
           onClick={() => setIsOpen(false)}
         >
           Home
-        </NavLink>
+        </NavLink> */}
+        <button
+          onClick={() => setIsOpen(false)}
+          className="bg-cyan-600 font-semibold hover:bg-lime-600 duration-300 transition-all p-2 rounded"
+        >
+          Buy Premium
+        </button>
         <img
           src={image}
           className="m-1 h-14 w-16 rounded-lg border border-gray-700 object-cover"

@@ -6,12 +6,11 @@ import {
   insertExpense,
   updateExpense,
 } from "../controllers/expenseController";
-import { authenticateToken, verifyToken } from "../utils/securityHelpers";
+import {  verifyToken } from "../utils/securityHelpers";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
 export const expenseRouter = express.Router();
 
-expenseRouter.use(authenticateToken);
 
 expenseRouter.post("/insertExpense", async (req, res) => {
   const parsed = expenseEntrySchema.safeParse(req.body);

@@ -30,7 +30,7 @@ const Home = () => {
   return loading ? (
     <Shimmer />
   ) : (
-    <div className="bg-gray- h-screen">
+    <div className="bg-gray-50 min-h-screen">
       <div>
         <ExpenseForm />
       </div>
@@ -40,7 +40,7 @@ const Home = () => {
           <ExpenseBarChart expenseData={expenseData} />
         </div>
       )}
-      <div className="flex w-full flex-wrap justify-center space-x-10 bg-gray-100 sm:flex-row">
+      <div className="flex w-full flex-wrap justify-center space-x-10  sm:flex-row">
         {expenseData &&
           expenseData.map((item: DataType) => (
             <div className="" key={item.id}>

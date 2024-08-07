@@ -2,12 +2,14 @@ import express from "express";
 import { getUser, insertUser } from "../controllers/userController";
 import { authValidationSchema } from "../utils/types";
 import {
+  authenticateToken,
   compareHashPassword,
   generateToken,
   hashPassword,
 } from "../utils/securityHelpers";
 
 export const userRouter = express.Router();
+
 
 userRouter.post("/signUp", async (req, res) => {
   let { fullName, password, email } = req.body;
@@ -41,7 +43,7 @@ userRouter.post("/signIn", async (req, res) => {
     const isValid = await compareHashPassword(plainPassword, hashedPassword);
     if (isValid) {
       const { id, fullName } = response;
-      console.log("user", id)
+      console.log("user", id);
       const token = generateToken(id);
       res.setHeader("Authorization", `Bearer ${token}`);
       res.status(200).json({
@@ -57,3 +59,5 @@ userRouter.post("/signIn", async (req, res) => {
     });
   }
 });
+
+userRouter.use(authenticateToken);
