@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import Shimmer from "../components/Shimmer";
 import { useEffect, useState } from "react";
 import ExpenseForm from "@/layouts/ExpenseForm";
@@ -35,7 +34,7 @@ const Home = () => {
         <ExpenseForm />
       </div>
       {expenseData && (
-        <div className="flex h-[50%] flex-col justify-evenly md:flex-row">
+        <div className="flex h-[50%] flex-col  justify-evenly  md:flex-row">
           <ExpenseChart expenseData={expenseData} />
           <ExpenseBarChart expenseData={expenseData} />
         </div>

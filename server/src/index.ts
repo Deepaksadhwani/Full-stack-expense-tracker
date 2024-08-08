@@ -6,10 +6,10 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    exposedHeaders: ["Authorization"],
+    exposedHeaders: ["Authorization", "user-auth-token"],
   })
 );
+
 app.use(express.json());
 app.use("/api/v1", rootRouter);
-
 app.listen(3000);

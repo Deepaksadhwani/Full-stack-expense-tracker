@@ -20,8 +20,14 @@ export const fetchExpenseData = createAsyncThunk("fetchExpense", async () => {
 export const deleteExpense = createAsyncThunk(
   "deleteExpense",
   async (id: number) => {
+    const token = localStorage.getItem("token");
     const response = await axios.delete(
       `${SERVER_URL}/user/expense/deleteExpense/${id}`,
+      {
+        headers: {
+          "user-auth-token": `Bearer ${token}`,
+        },
+      },
     );
     return id;
   },
@@ -50,9 +56,16 @@ export const insertExpense = createAsyncThunk(
 export const updateExpense = createAsyncThunk(
   "updateExpense",
   async ({ expenseData, id }: UpdateExpensePayload, { dispatch }) => {
+    const token = localStorage.getItem("token");
+
     await axios.put(
       `${SERVER_URL}/user/expense/updateExpense/${id}`,
       expenseData,
+      {
+        headers: {
+          "user-auth-token": `Bearer ${token}`,
+        },
+      },
     );
     dispatch(fetchExpenseData());
   },

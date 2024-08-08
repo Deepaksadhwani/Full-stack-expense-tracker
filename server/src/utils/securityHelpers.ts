@@ -31,6 +31,8 @@ export const verifyToken = (token: string) => {
 
 export function authenticateToken(req: any, res: any, next: any) {
   const authHeader = req.headers["user-auth-token"];
+  console.log("authheader", authHeader);
+
   if (!authHeader)
     return res.status(401).json({ message: "No token provided." });
 

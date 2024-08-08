@@ -8,4 +8,3 @@ export const rootRouter = express.Router();
 rootRouter.use("/user", userRouter);
 rootRouter.use("/user/expense", expenseRouter);
 rootRouter.use("/user/purchase", purchaseRouter);
-rootRouter.use("/checkout")

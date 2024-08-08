@@ -6,7 +6,7 @@ import {
   insertExpense,
   updateExpense,
 } from "../controllers/expenseController";
-import {  verifyToken } from "../utils/securityHelpers";
+import { authenticateToken, verifyToken } from "../utils/securityHelpers";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
 export const expenseRouter = express.Router();
@@ -50,7 +50,7 @@ expenseRouter.get("/accessExpenses", async (req, res) => {
   }
 });
 
-expenseRouter.delete("/deleteExpense/:id", async (req, res) => {
+expenseRouter.delete("/deleteExpense/:id", authenticateToken,async (req, res) => {
   const { id: stringId } = req.params;
   const id = parseInt(stringId);
   const response = await deleteExpense(id);
@@ -60,7 +60,7 @@ expenseRouter.delete("/deleteExpense/:id", async (req, res) => {
     .json({ message: "Expense is  successfully deleted.", data: response });
 });
 
-expenseRouter.put("/updateExpense/:id", async (req, res) => {
+expenseRouter.put("/updateExpense/:id",authenticateToken, async (req, res) => {
   const { id: StringId } = req.params;
   const id = parseInt(StringId);
   const response = await updateExpense(id, req.body);

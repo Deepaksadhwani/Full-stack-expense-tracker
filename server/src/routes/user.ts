@@ -2,7 +2,6 @@ import express from "express";
 import { getUser, insertUser } from "../controllers/userController";
 import { authValidationSchema } from "../utils/types";
 import {
-  authenticateToken,
   compareHashPassword,
   generateToken,
   hashPassword,
@@ -60,4 +59,3 @@ userRouter.post("/signIn", async (req, res) => {
   }
 });
 
-userRouter.use(authenticateToken);

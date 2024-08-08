@@ -19,19 +19,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-interface ExpenseItem {
-  id: number;
-  amount: number;
-  description: string;
-  category: string;
-  date: string;
-}
 
-export function ExpenseBarChart({expenseData} : {expenseData:any}) {
+
+export function ExpenseBarChart({ expenseData }: { expenseData: any }) {
   console.log(expenseData);
 
   return (
-    <ChartContainer config={chartConfig} className="shadow-md">
+    <ChartContainer config={chartConfig} className="md:w-[40vw] w-[90vw] mx-auto md:mx-0 shadow-md">
       <BarChart data={expenseData}>
         <CartesianGrid vertical={false} />
         <XAxis
@@ -44,7 +38,6 @@ export function ExpenseBarChart({expenseData} : {expenseData:any}) {
         <Tooltip content={<ChartTooltipContent nameKey="amount" />} />
         <Bar dataKey="amount" fill={chartConfig.desktop.color} radius={4} />
         <Bar dataKey="category" fill={chartConfig.desktop.color} radius={4} />
-       
       </BarChart>
     </ChartContainer>
   );
