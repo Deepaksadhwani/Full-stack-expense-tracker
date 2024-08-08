@@ -130,7 +130,7 @@ const ExpenseCard: FC<DataType> = ({
         </div>
         <div className="text-right">
           <p className="text-gray-600">Amount</p>
-          <p className="text-2xl font-bold text-indigo-600">${amount}</p>
+          <p className="text-2xl font-bold text-indigo-600">₹{amount}</p>
         </div>
       </div>
       <div className="flex justify-start bg-gray-50 px-6 py-4">

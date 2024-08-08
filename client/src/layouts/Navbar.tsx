@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NavLogo from "/src/assets/navlogo.jpeg";
 import Shimmer from "../components/Shimmer";
 import { useDispatch } from "react-redux";
@@ -8,6 +8,8 @@ import DropDownMenu from "@/components/DropDownMenu";
 import { AppDispatch } from "@/store/appStore";
 import { removeExpense } from "@/store/slices/expenseSlice";
 import { fetchExpenseData } from "@/store/slices/expenseSlice";
+import axios from "axios";
+import { SERVER_URL } from "@/utils/constants";
 
 const Navbar = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -32,6 +34,63 @@ const Navbar = () => {
       setLoading(false);
     }, 500);
     return () => clearTimeout(timer);
+  };
+
+  const checkoutHandler = async () => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "user-auth-token": `Bearer ${token}`,
+      },
+    };
+    const {
+      data: { orderId, amount, key_id, status },
+    } = await axios.get(
+      `${SERVER_URL}/user/purchase/premiummembership`,
+      config,
+    );
+    console.log(orderId, amount, key_id);
+    const options = {
+      key: key_id, // Enter the Key ID generated from the Dashboard
+      amount: amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: "INR",
+      name: "Delight Corp", //your business name
+      description: "Test Transaction",
+      image: "https://example.com/your_logo",
+      order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      handler: async (response: any) => {
+        await axios.post(
+          `${SERVER_URL}/user/purchase/paymentverfication`,
+          {
+            amount,
+            status,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+          },
+          config,
+        );
+        alert("Payment is Successfully Done.");
+      },
+      prefill: {
+        //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+        name: "Deepak sadhwani", //your customer's name
+        email: "DeepakSadhwani@example.com",
+        contact: "9000090000", //Provide the customer's phone number for better conversion rates
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#121212",
+      },
+    };
+
+    const Razorpay = (window as any).Razorpay;
+    const razor = new Razorpay(options);
+    razor.open();
+
+    // const razor = new window.Razorpay(options);
+    // razor.open();
   };
 
   const handleDownloadExpenseFile = () => {
@@ -86,8 +145,8 @@ const Navbar = () => {
           Home
         </NavLink> */}
         <button
-          onClick={() => setIsOpen(false)}
-          className="bg-cyan-600 font-semibold hover:bg-lime-600 duration-300 transition-all p-2 rounded"
+          onClick={checkoutHandler}
+          className="rounded bg-cyan-600 p-2 font-semibold transition-all duration-300 hover:bg-lime-600"
         >
           Buy Premium
         </button>
@@ -113,7 +172,6 @@ const Navbar = () => {
         {toggleHamburger && (
           <div className="z-100 absolute top-20 flex cursor-pointer items-center justify-center rounded-lg border-2 border-black bg-gradient-to-bl from-gray-200 via-gray-300 to-gray-200 py-2 text-gray-700 shadow-md sm:hidden">
             <ul>
-            
               <li
                 onClick={handleDownloadExpenseFile}
                 className="min-w-60 border-b-2 border-gray-700"
@@ -126,11 +184,7 @@ const Navbar = () => {
             </ul>
           </div>
         )}
-        {isOpen && (
-          <DropDownMenu
-            onLogOutHandler={logoutHandler}
-          />
-        )}
+        {isOpen && <DropDownMenu onLogOutHandler={logoutHandler} />}
       </div>
     </div>
   );

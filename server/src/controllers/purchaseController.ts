@@ -1,9 +1,16 @@
 import Razorpay from "razorpay";
 import dotenv from "dotenv";
+import { PrismaClient } from "@prisma/client";
+import { response } from "express";
+
 dotenv.config({ path: ".env" });
 
 const key_id: any = process.env.RAZROPAY_API_KEY;
 const key_secret = process.env.RAZORPAY_SECRET_KEY;
+
+const prisma = new PrismaClient();
+
+const createOrder = async () => {};
 
 export const purchasePremium = async (req: any, res: any) => {
   try {
@@ -16,14 +23,13 @@ export const purchasePremium = async (req: any, res: any) => {
       key_id,
       key_secret,
     });
-    const order = await rpz.orders.create(options, (err, order) => {
+    rpz.orders.create(options, (err, order) => {
       if (err) {
-        res.status(400).json({ error: err });
-      } else {
-        res.status(200).json({ data: order });
+        console.log(err);
+        return res.status(400).json({ error: err });
       }
+      res.status(200).json({ order, orderId: order.id, amount: order.amount, key_id });
     });
-    
   } catch (error) {
     console.log(error);
     res.status(403).json({ message: "something went wrong", error });
