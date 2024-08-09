@@ -1,14 +1,19 @@
 import dotenv from "dotenv";
 import express from "express";
-import { purchasePremium } from "../controllers/purchaseController";
+import {
+  lastSuccessfulTransaction,
+  purchasePremium,
+  updateTransaction,
+} from "../controllers/purchaseController";
+import { authenticateToken } from "../utils/securityHelpers";
 dotenv.config({ path: ".env" });
 
 export const purchaseRouter = express.Router();
 
 purchaseRouter.get("/premiummembership", purchasePremium);
-purchaseRouter.post("/paymentverfication", (req, res) => {
-  console.log( req.body);
-  res.status(200).json({
-    success: true,
-  });
-});
+purchaseRouter.post(
+  "/update-transaction",
+  authenticateToken,
+  updateTransaction
+);
+purchaseRouter.get("/verified-premium", lastSuccessfulTransaction);

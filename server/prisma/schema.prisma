@@ -33,10 +33,11 @@ model Expense {
 }
 
 model Order {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   paymentId String
-  orderId   String
+  orderId   String   @unique
   status    String
-  User      User?  @relation(fields: [userId], references: [id])
+  User      User?    @relation(fields: [userId], references: [id])
   userId    Int?
+  createdAt DateTime @default(now())
 }

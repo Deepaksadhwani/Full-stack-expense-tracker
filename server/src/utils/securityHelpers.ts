@@ -39,6 +39,5 @@ export function authenticateToken(req: any, res: any, next: any) {
   const token = authHeader.split(" ")[1];
   const userData = verifyToken(token);
   if (!userData) return res.status(401).json({ message: "Invalid token." });
-
   next();
 }

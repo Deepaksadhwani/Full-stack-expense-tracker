@@ -17,7 +17,12 @@ const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState<string>("Profile");
-
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      "user-auth-token": `Bearer ${token}`,
+    },
+  };
   // const activeClass = "text-yellow-400";
   const [toggleHamburger, setToggleHamburger] = useState(false);
 
@@ -37,14 +42,8 @@ const Navbar = () => {
   };
 
   const checkoutHandler = async () => {
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        "user-auth-token": `Bearer ${token}`,
-      },
-    };
     const {
-      data: { orderId, amount, key_id, status },
+      data: { orderId, amount, key_id },
     } = await axios.get(
       `${SERVER_URL}/user/purchase/premiummembership`,
       config,
@@ -60,12 +59,11 @@ const Navbar = () => {
       order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       handler: async (response: any) => {
         await axios.post(
-          `${SERVER_URL}/user/purchase/paymentverfication`,
+          `${SERVER_URL}/user/purchase/update-transaction`,
           {
-            amount,
-            status,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_order_id: response.razorpay_order_id,
+            status: "SUCCESSFUL",
+            paymentId: response.razorpay_payment_id,
+            orderId: response.razorpay_order_id,
           },
           config,
         );
@@ -112,6 +110,13 @@ const Navbar = () => {
     // document.body.removeChild(link);
   };
 
+  const premiumVerification = async () => {
+    const response = await axios.get(
+      `${SERVER_URL}/user/purchase/verified-premium`,config
+    );
+    console.log("pv", response);
+  };
+
   useEffect(() => {
     dispatch(fetchExpenseData());
     const userDataStr = localStorage.getItem("userData");
@@ -120,6 +125,7 @@ const Navbar = () => {
       setDisplayName(userData.fullName);
       console.log(userData.fullName);
     }
+    premiumVerification();
   }, []);
   return loading ? (
     <Shimmer />
