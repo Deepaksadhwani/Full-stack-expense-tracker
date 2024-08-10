@@ -10,6 +10,8 @@ import { removeExpense } from "@/store/slices/expenseSlice";
 import { fetchExpenseData } from "@/store/slices/expenseSlice";
 import axios from "axios";
 import { SERVER_URL } from "@/utils/constants";
+import toast from "react-hot-toast";
+import usePremiumVerification from "@/hook/usePremiumVerification";
 
 const Navbar = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -17,16 +19,20 @@ const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState<string>("Profile");
+  const [togglePremiumButtom, setTogglePremiumButtom] =
+    useState<boolean>(false);
   const token = localStorage.getItem("token");
+  // const activeClass = "text-yellow-400";
+  const [toggleHamburger, setToggleHamburger] = useState(false);
   const config = {
     headers: {
       "user-auth-token": `Bearer ${token}`,
     },
   };
-  // const activeClass = "text-yellow-400";
-  const [toggleHamburger, setToggleHamburger] = useState(false);
-
   const image = NavLogo;
+
+  //custom hook
+  usePremiumVerification({ SERVER_URL, config, setTogglePremiumButtom });
 
   const logoutHandler = () => {
     setLoading(true);
@@ -67,7 +73,8 @@ const Navbar = () => {
           },
           config,
         );
-        alert("Payment is Successfully Done.");
+        toast.success("you have premium membership now.");
+        setTogglePremiumButtom(true);
       },
       prefill: {
         //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
@@ -110,22 +117,18 @@ const Navbar = () => {
     // document.body.removeChild(link);
   };
 
-  const premiumVerification = async () => {
-    const response = await axios.get(
-      `${SERVER_URL}/user/purchase/verified-premium`,config
-    );
-    console.log("pv", response);
-  };
-
   useEffect(() => {
     dispatch(fetchExpenseData());
     const userDataStr = localStorage.getItem("userData");
+    console.log(userDataStr);
     if (userDataStr) {
       const userData = JSON.parse(userDataStr);
-      setDisplayName(userData.fullName);
-      console.log(userData.fullName);
+      console.log(userData);
+      setDisplayName(userData.name);
+      console.log(userData.name);
     }
-    premiumVerification();
+
+    console.log(togglePremiumButtom);
   }, []);
   return loading ? (
     <Shimmer />
@@ -150,12 +153,14 @@ const Navbar = () => {
         >
           Home
         </NavLink> */}
-        <button
-          onClick={checkoutHandler}
-          className="rounded bg-cyan-600 p-2 font-semibold transition-all duration-300 hover:bg-lime-600"
-        >
-          Buy Premium
-        </button>
+        {!togglePremiumButtom && (
+          <button
+            onClick={checkoutHandler}
+            className="rounded bg-cyan-600 p-2 font-semibold transition-all duration-300 hover:bg-lime-600"
+          >
+            Buy Premium
+          </button>
+        )}
         <img
           src={image}
           className="m-1 h-14 w-16 rounded-lg border border-gray-700 object-cover"

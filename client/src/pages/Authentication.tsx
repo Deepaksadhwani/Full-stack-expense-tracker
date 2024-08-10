@@ -45,12 +45,13 @@ const Authentication = () => {
       setError("");
       try {
         const response: any = await axios.post(
-          `${SERVER_URL}/user/signUp`,
+          `${SERVER_URL}/user/sign-up`,
           parsed.data,
         );
         dispatch(setUserData(response.data.data));
         const token = response.headers["authorization"]?.split(" ")[1];
         localStorage.setItem("token", token);
+        console.log("why this giving name in object",response.data.data)
         localStorage.setItem("userData", JSON.stringify(response.data.data));
         navigate("/")
       } catch (error) {
@@ -65,12 +66,13 @@ const Authentication = () => {
       }
       try {
         const response: any = await axios.post(
-          `${SERVER_URL}/user/signIn`,
+          `${SERVER_URL}/user/sign-in`,
           parsed.data,
         );
         const token = response.headers["authorization"]?.split(" ")[1];
         dispatch(setUserData(response.data.data));
         localStorage.setItem("token", token);
+        console.log("why this give full name in object",response.data.data)
         localStorage.setItem("userData", JSON.stringify(response.data.data));
         navigate("/")
         setError("");

@@ -38,7 +38,7 @@ export const lastSuccessfulTransaction = async (req: any, res: any) => {
       orderBy: { createdAt: "desc" },
       select: { status: true },
     });
-    console.log(response)
+    console.log("findFist",response)
     res.status(200).json({ status: response.status });
   } catch (error) {
     res.status(500).json({ message: "internal error." });

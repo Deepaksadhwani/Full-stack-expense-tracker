@@ -9,8 +9,7 @@ import {
 
 export const userRouter = express.Router();
 
-
-userRouter.post("/signUp", async (req, res) => {
+userRouter.post("/sign-up", async (req, res) => {
   let { fullName, password, email } = req.body;
   password = await hashPassword(password, 10);
   try {
@@ -27,7 +26,7 @@ userRouter.post("/signUp", async (req, res) => {
   }
 });
 
-userRouter.post("/signIn", async (req, res) => {
+userRouter.post("/sign-in", async (req, res) => {
   const parsed = authValidationSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(404).json({
@@ -41,13 +40,13 @@ userRouter.post("/signIn", async (req, res) => {
     const hashedPassword = response?.password;
     const isValid = await compareHashPassword(plainPassword, hashedPassword);
     if (isValid) {
-      const { id, fullName } = response;
+      const { id, fullName: name } = response;
       console.log("user", id);
       const token = generateToken(id);
       res.setHeader("Authorization", `Bearer ${token}`);
       res.status(200).json({
         message: "logged in successfully.",
-        data: { fullName, email },
+        data: { name, email },
       });
     } else {
       res.status(401).json({ message: "Invalid Password." });
@@ -58,4 +57,3 @@ userRouter.post("/signIn", async (req, res) => {
     });
   }
 });
-
