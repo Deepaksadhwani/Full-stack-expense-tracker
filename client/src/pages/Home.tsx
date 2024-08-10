@@ -24,7 +24,7 @@ const Home = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 200);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
   return loading ? (

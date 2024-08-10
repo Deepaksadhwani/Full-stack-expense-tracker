@@ -1,93 +1,46 @@
-import { PrismaClient } from "@prisma/client";
+import { deleteExpense, fetchUserExpenses, insertExpense, updateExpense } from "../services/expenseService";
+import { expenseEntrySchema } from "../utils/types";
 
-const prisma = new PrismaClient();
 
-interface ExpenseData {
-  amount: number;
-  description: string;
-  category: string;
-  date: string;
-  userId: any;
-}
-
-export const insertExpense = async (expense: ExpenseData) => {
-  const date = new Date(expense.date);
-  const res = await prisma.expense.create({
-    data: {
-      amount: expense.amount,
-      description: expense.description,
-      category: expense.category,
-      date: date,
-      userId: expense.userId,
-    },
-    select: {
-      id: true,
-      amount: true,
-      description: true,
-      category: true,
-      date: true,
-    },
-  });
-  return res;
+//insertExpense
+export const insertExpenseController = async (req: any, res: any) => {
+  const parsed = expenseEntrySchema.safeParse(req.body);
+  if (parsed.success) {
+    const obj = { ...parsed.data, userId: req.userId };
+    await insertExpense(obj);
+    res.status(201).json({
+      message: "Expense entry is successfully added.",
+      data: parsed.data,
+    });
+  } else {
+    res.status(400).json({ message: "Failed to add expense entry." });
+  }
+};
+//access expense
+export const accessExpenseController = async (req: any, res: any) => {
+  const id: any = req.userId;
+  const response = await fetchUserExpenses(id);
+  res
+    .status(200)
+    .json({ message: "Expense successfully fetched.", data: response });
 };
 
-export const fetchUserExpenses = async (id: number) => {
-  const res = await prisma.expense.findMany({
-    where: {
-      userId: id,
-    },
-    select: {
-      id: true,
-      amount: true,
-      description: true,
-      category: true,
-      date: true,
-    },
-  });
-  return res;
+//delete expense
+export const deleteExpenseController = async (req: any, res: any) => {
+  const { id: stringId } = req.params;
+  const id = parseInt(stringId);
+  const response = await deleteExpense(id);
+  res
+    .status(200)
+    .json({ message: "Expense is  successfully deleted.", data: response });
 };
 
-export const deleteExpense = async (id: number) => {
-  const res = await prisma.expense.delete({
-    where: {
-      id,
-    },
-    select: {
-      id: true,
-      amount: true,
-      description: true,
-      category: true,
-      date: true,
-    },
-  });
-  return res;
-};
-
-interface DataType {
-  amount: number;
-  description: string;
-  date: string;
-  category: string;
-}
-
-export const updateExpense = async (id: number, Data: DataType) => {
-  const res = await prisma.expense.update({
-    where: {
-      id,
-    },
-    data: {
-      amount: Data.amount,
-      description: Data.description,
-      category: Data.category,
-      date: Data.date,
-    },
-    select: {
-      id: true,
-      amount: true,
-      description: true,
-      category: true,
-      date: true,
-    },
-  });
-  return res;
+// update expense
+export const updateExpenseController = async (req: any, res: any) => {
+  const { id: StringId } = req.params;
+  const id = parseInt(StringId);
+  const response = await updateExpense(id, req.body);
+  res
+    .status(200)
+    .json({ message: "Expense is successfully updated.", data: response });
 };

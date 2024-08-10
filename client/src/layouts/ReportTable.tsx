@@ -58,6 +58,7 @@ const ReportTable = () => {
       <TableCaption>A list of your recent expenses.</TableCaption>
       <TableHeader>
         <TableRow>
+        <TableHead >No.</TableHead>
           <TableHead className="w-[100px]">Date</TableHead>
           <TableHead>Category</TableHead>
           <TableHead>Description</TableHead>
@@ -76,6 +77,7 @@ const ReportTable = () => {
         {
           sortedList.map((expense, index) => (
             <TableRow key={index}>
+              <TableCell>{index+ 1}</TableCell>
               <TableCell className="font-medium md:w-1/6">
                 {expense.date.slice(0, 10).split("-").reverse().join("-")}
               </TableCell>
