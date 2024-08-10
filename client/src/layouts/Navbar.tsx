@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import NavLogo from "/src/assets/navlogo.jpeg";
 import Shimmer from "../components/Shimmer";
 import { useDispatch } from "react-redux";
@@ -22,7 +22,7 @@ const Navbar = () => {
   const [togglePremiumButtom, setTogglePremiumButtom] =
     useState<boolean>(false);
   const token = localStorage.getItem("token");
-  // const activeClass = "text-yellow-400";
+  const activeClass = "text-yellow-400";
   const [toggleHamburger, setToggleHamburger] = useState(false);
   const config = {
     headers: {
@@ -43,7 +43,7 @@ const Navbar = () => {
       dispatch(removeExpense());
       navigate("/");
       setLoading(false);
-    }, 500);
+    }, 300);
     return () => clearTimeout(timer);
   };
 
@@ -55,13 +55,13 @@ const Navbar = () => {
       config,
     );
     const options = {
-      key: key_id, 
-      amount: amount, 
+      key: key_id,
+      amount: amount,
       currency: "INR",
       name: "Delight Corp",
       description: "Test Transaction",
       image: "https://example.com/your_logo",
-      order_id: orderId, 
+      order_id: orderId,
       handler: async (response: any) => {
         await axios.post(
           `${SERVER_URL}/user/purchase/update-transaction`,
@@ -78,7 +78,7 @@ const Navbar = () => {
       prefill: {
         name: "Deepak sadhwani",
         email: "DeepakSadhwani@example.com",
-        contact: "9000090000", 
+        contact: "9000090000",
       },
       notes: {
         address: "Razorpay Corporate Office",
@@ -139,13 +139,21 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center space-x-3 text-xl font-semibold text-white">
-        {/* <NavLink
+      {togglePremiumButtom &&  <div className="space-x-3"> <NavLink
           to="/"
           className={({ isActive }) => (isActive ? activeClass : undefined)}
           onClick={() => setIsOpen(false)}
         >
           Home
-        </NavLink> */}
+        </NavLink>
+        <NavLink
+          to="/report"
+          className={({ isActive }) => (isActive ? activeClass : undefined)}
+          onClick={() => setIsOpen(false)}
+        >
+          Report
+        </NavLink></div>}
+       
         {!togglePremiumButtom && (
           <button
             onClick={checkoutHandler}
