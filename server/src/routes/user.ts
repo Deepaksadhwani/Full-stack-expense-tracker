@@ -41,7 +41,6 @@ userRouter.post("/sign-in", async (req, res) => {
     const isValid = await compareHashPassword(plainPassword, hashedPassword);
     if (isValid) {
       const { id, fullName: name } = response;
-      console.log("user", id);
       const token = generateToken(id);
       res.setHeader("Authorization", `Bearer ${token}`);
       res.status(200).json({

@@ -13,13 +13,25 @@ const chartConfig: ChartConfig = {
     label: "Food",
     color: "hsl(var(--chart-1))",
   },
-  petrol: {
-    label: "Petrol",
+  entertainment: {
+    label: "Entertainment",
     color: "hsl(var(--chart-2))",
+  },
+  transportation: {
+    label: "Transportation",
+    color: "hsl(var(--chart-3))",
+  },
+  electronic: {
+    label: "Electronic item",
+    color: "hsl(var(--chart-4))",
+  },
+  education: {
+    label: "Education",
+    color: "hsl(var(--chart-5))",
   },
   other: {
     label: "Other",
-    color: "hsl(var(--chart-3))",
+    color: "hsl(var(--chart-default))",
   },
 };
 
@@ -35,20 +47,30 @@ interface ExpenseChartProps {
   expenseData: DataType[];
 }
 
-export const ExpenseChart: FC<ExpenseChartProps> = ({ expenseData }) => {
+export const ExpensePieChart: FC<ExpenseChartProps> = ({ expenseData }) => {
   const categoryData = React.useMemo(() => {
     const result: { [key: string]: number } = {};
     expenseData.forEach((item) => {
-      if (result[item.category]) {
-        result[item.category] += item.amount;
+      const normalizedCategory = item.category
+        .toLowerCase()
+         // Adjust category format
+
+      const categoryKey =
+        Object.keys(chartConfig).includes(normalizedCategory)
+          ? normalizedCategory
+          : 'other'; 
+
+      if (result[categoryKey]) {
+        result[categoryKey] += item.amount;
       } else {
-        result[item.category] = item.amount;
+        result[categoryKey] = item.amount;
       }
     });
+
     return Object.keys(result).map((category) => ({
       category,
       amount: result[category],
-      fill: chartConfig[category]?.color,
+      fill: chartConfig[category]?.color || chartConfig.other.color, // Fallback color
     }));
   }, [expenseData]);
 

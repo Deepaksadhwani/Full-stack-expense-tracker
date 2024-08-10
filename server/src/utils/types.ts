@@ -1,4 +1,4 @@
-import { z } from "zod";
+import {  z } from "zod";
 
 export const authValidationSchema = z.object({
   email: z.string().email(),
@@ -10,5 +10,4 @@ export const expenseEntrySchema = z.object({
   description: z.string(),
   category: z.string(),
   date: z.string(),
-  userId: z.string() ,
 });

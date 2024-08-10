@@ -1,7 +1,6 @@
 import Razorpay from "razorpay";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
-import { verifyToken } from "../utils/securityHelpers";
 
 dotenv.config({ path: ".env" });
 
@@ -20,15 +19,7 @@ interface OrderTypes {
 /*----------------------Get last transaction for verification--------------------- */
 
 export const lastSuccessfulTransaction = async (req: any, res: any) => {
-  const authHeader = req.headers["user-auth-token"];
-  if (!authHeader)
-    return res.status(401).json({ message: "No token provided." });
-
-  const token = authHeader.split(" ")[1];
-  const userData = verifyToken(token);
-  if (!userData) return res.status(401).json({ message: "Invalid token." });
-  const { id }: any = userData;
-
+  const id = req.userId;
   try {
     const response: any = await prisma.order.findFirst({
       where: {
@@ -38,7 +29,6 @@ export const lastSuccessfulTransaction = async (req: any, res: any) => {
       orderBy: { createdAt: "desc" },
       select: { status: true },
     });
-    console.log("findFist",response)
     res.status(200).json({ status: response.status });
   } catch (error) {
     res.status(500).json({ message: "internal error." });
@@ -76,14 +66,7 @@ export const updateOrder = async (
 };
 /*---------------------createOrder  controller---------------- */
 export const purchasePremium = async (req: any, res: any) => {
-  const authHeader = req.headers["user-auth-token"];
-  if (!authHeader)
-    return res.status(401).json({ message: "No token provided." });
-
-  const token = authHeader.split(" ")[1];
-  const userData = verifyToken(token);
-  if (!userData) return res.status(401).json({ message: "Invalid token." });
-  const { id }: any = userData;
+  const id = req.userId;
   try {
     const options = {
       amount: 2500,
@@ -95,7 +78,6 @@ export const purchasePremium = async (req: any, res: any) => {
     });
     rpz.orders.create(options, async (err, order) => {
       if (err) {
-        console.log(err);
         return res.status(400).json({ error: err });
       }
       const insertOrder = await createOrder({
@@ -112,7 +94,6 @@ export const purchasePremium = async (req: any, res: any) => {
       });
     });
   } catch (error) {
-    console.log(error);
     res.status(403).json({ message: "something went wrong", error });
   }
 };

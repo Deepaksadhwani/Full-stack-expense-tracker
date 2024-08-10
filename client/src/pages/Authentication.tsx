@@ -22,67 +22,47 @@ const Authentication = () => {
   const password = useRef<HTMLInputElement>(null);
   const [isSign, setIsSign] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  
 
   const toggleSignInForm = () => {
     setIsSign((prev) => !prev);
   };
 
-  const validateHandler = async () => {
+  const authHandler = async (endpoint: string, errorMessage: string) => {
     const data: Data = {
       fullName: name.current?.value,
       email: email.current?.value,
       password: password.current?.value.toString(),
     };
-    if (!isSign) {
-      const parsed = authValidationSchema.safeParse(data);
-      if (!parsed.success) {
-        setError("Invalid input found.");
-        return;
-      }
-      setError("");
-      try {
-        const response: any = await axios.post(
-          `${SERVER_URL}/user/sign-up`,
-          parsed.data,
-        );
-        dispatch(setUserData(response.data.data));
-        const token = response.headers["authorization"]?.split(" ")[1];
-        localStorage.setItem("token", token);
-        console.log("why this giving name in object",response.data.data)
-        localStorage.setItem("userData", JSON.stringify(response.data.data));
-        navigate("/")
-      } catch (error) {
-        setError("User already exists.");
-      }
-    } // Sign in
-    else {
-      const parsed = authValidationSchema.safeParse(data);
-      if (!parsed.success) {
-        setError("Invalid input found.");
-        return;
-      }
-      try {
-        const response: any = await axios.post(
-          `${SERVER_URL}/user/sign-in`,
-          parsed.data,
-        );
-        const token = response.headers["authorization"]?.split(" ")[1];
-        dispatch(setUserData(response.data.data));
-        localStorage.setItem("token", token);
-        console.log("why this give full name in object",response.data.data)
-        localStorage.setItem("userData", JSON.stringify(response.data.data));
-        navigate("/")
-        setError("");
-      } catch (error) {
-        setError("404 User does not exist.");
-      }
+    const parsed = authValidationSchema.safeParse(data);
+    if (!parsed.success) {
+      setError("Invalid input found.");
+      return;
+    }
+    try {
+      const response: any = await axios.post(
+        `${SERVER_URL}${endpoint}`,
+        parsed.data,
+      );
+      dispatch(setUserData(response.data.data));
+      const token = response.headers["authorization"]?.split(" ")[1];
+      localStorage.setItem("token", token);
+      localStorage.setItem("userData", JSON.stringify(response.data.data));
+      navigate("/");
+    } catch (error) {
+      setError(errorMessage);
     }
   };
 
-  
+  const validateHandler = async () => {
+    if (!isSign) {
+      authHandler("/user/sign-up", "User already exists.");
+    } else {
+      authHandler("/user/sign-in", "404 User does not exist.");
+    }
+  };
+
   useEffect(() => {
     const userToken = localStorage.getItem("token");
 
@@ -91,7 +71,6 @@ const Authentication = () => {
       navigate("/");
     }
   }, []);
-
 
   const bgColor = isSign
     ? "flex w-[90%]  flex-col  items-center space-y-3 rounded-md border-2 border-gray-200 bg-white py-20 shadow-md shadow-black lg:w-[20%] md:py-[42px]  "

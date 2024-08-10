@@ -54,15 +54,14 @@ const Navbar = () => {
       `${SERVER_URL}/user/purchase/premiummembership`,
       config,
     );
-    console.log(orderId, amount, key_id);
     const options = {
-      key: key_id, // Enter the Key ID generated from the Dashboard
-      amount: amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      key: key_id, 
+      amount: amount, 
       currency: "INR",
-      name: "Delight Corp", //your business name
+      name: "Delight Corp",
       description: "Test Transaction",
       image: "https://example.com/your_logo",
-      order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      order_id: orderId, 
       handler: async (response: any) => {
         await axios.post(
           `${SERVER_URL}/user/purchase/update-transaction`,
@@ -77,10 +76,9 @@ const Navbar = () => {
         setTogglePremiumButtom(true);
       },
       prefill: {
-        //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-        name: "Deepak sadhwani", //your customer's name
+        name: "Deepak sadhwani",
         email: "DeepakSadhwani@example.com",
-        contact: "9000090000", //Provide the customer's phone number for better conversion rates
+        contact: "9000090000", 
       },
       notes: {
         address: "Razorpay Corporate Office",
@@ -120,15 +118,10 @@ const Navbar = () => {
   useEffect(() => {
     dispatch(fetchExpenseData());
     const userDataStr = localStorage.getItem("userData");
-    console.log(userDataStr);
     if (userDataStr) {
       const userData = JSON.parse(userDataStr);
-      console.log(userData);
       setDisplayName(userData.name);
-      console.log(userData.name);
     }
-
-    console.log(togglePremiumButtom);
   }, []);
   return loading ? (
     <Shimmer />

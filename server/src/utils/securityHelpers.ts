@@ -30,14 +30,14 @@ export const verifyToken = (token: string) => {
 };
 
 export function authenticateToken(req: any, res: any, next: any) {
-  const authHeader = req.headers["user-auth-token"];
-  console.log("authheader", authHeader);
-
+  const authHeader = req.headers["user-auth-token"]; //  always access header information in lowercase even client send uppercase
   if (!authHeader)
     return res.status(401).json({ message: "No token provided." });
 
   const token = authHeader.split(" ")[1];
   const userData = verifyToken(token);
   if (!userData) return res.status(401).json({ message: "Invalid token." });
+  const customUserData = userData as any;
+  req.userId = customUserData.id;
   next();
 }

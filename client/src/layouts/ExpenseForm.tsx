@@ -1,11 +1,9 @@
 import Shimmer from "@/components/Shimmer";
-import useInsertExpense from "@/hooks/useInsertExpense";
 import { AppDispatch } from "@/store/appStore";
 import { insertExpense } from "@/store/slices/expenseSlice";
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
-const token = localStorage.getItem("token");
 const ExpenseForm = ({}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const amount = useRef<HTMLInputElement>(null);
@@ -23,7 +21,6 @@ const ExpenseForm = ({}) => {
       description: description.current?.value ?? "",
       category: category.current?.value ?? "",
       date: parsedDate,
-      userId: token,
     };
     dispatch(insertExpense(expenseEntry));
   };
@@ -64,7 +61,10 @@ const ExpenseForm = ({}) => {
             ref={category}
           >
             <option value="Food">Food</option>
-            <option value="Petrol">Petrol</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Transportation">Transportation</option>
+            <option value="Electronic">Electronic item</option>
+            <option value="Education">Education</option>
             <option value="Other">Other</option>
           </select>
         </div>

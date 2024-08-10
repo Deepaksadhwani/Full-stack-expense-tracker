@@ -22,7 +22,6 @@ const chartConfig = {
 
 
 export function ExpenseBarChart({ expenseData }: { expenseData: any }) {
-  console.log(expenseData);
 
   return (
     <ChartContainer config={chartConfig} className="md:w-[40vw] w-[90vw] mx-auto md:mx-0 shadow-md">

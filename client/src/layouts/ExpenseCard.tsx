@@ -1,7 +1,5 @@
 import { AppDispatch } from "@/store/appStore";
 import { deleteExpense, updateExpense } from "@/store/slices/expenseSlice";
-import { SERVER_URL } from "@/utils/constants";
-import axios from "axios";
 import { FC, useRef } from "react";
 import { useDispatch } from "react-redux";
 

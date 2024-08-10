@@ -13,7 +13,6 @@ export const fetchExpenseData = createAsyncThunk("fetchExpense", async () => {
       },
     },
   );
-  console.log(response);
   return response.data.data;
 });
 
@@ -21,14 +20,11 @@ export const deleteExpense = createAsyncThunk(
   "deleteExpense",
   async (id: number) => {
     const token = localStorage.getItem("token");
-    const response = await axios.delete(
-      `${SERVER_URL}/user/expense/deleteExpense/${id}`,
-      {
-        headers: {
-          "user-auth-token": `Bearer ${token}`,
-        },
+    await axios.delete(`${SERVER_URL}/user/expense/deleteExpense/${id}`, {
+      headers: {
+        "user-auth-token": `Bearer ${token}`,
       },
-    );
+    });
     return id;
   },
 );
@@ -44,11 +40,15 @@ interface UpdateExpensePayload {
   expenseData: any;
   id: number;
 }
-
 export const insertExpense = createAsyncThunk(
   "insertExpense",
   async (expenseData: DataType, { dispatch }) => {
-    await axios.post(`${SERVER_URL}/user/expense/insertExpense`, expenseData);
+    const token = localStorage.getItem("token");
+    await axios.post(`${SERVER_URL}/user/expense/insertExpense`, expenseData, {
+      headers: {
+        "user-auth-token": `Bearer ${token}`,
+      },
+    });
     dispatch(fetchExpenseData());
   },
 );
@@ -57,7 +57,6 @@ export const updateExpense = createAsyncThunk(
   "updateExpense",
   async ({ expenseData, id }: UpdateExpensePayload, { dispatch }) => {
     const token = localStorage.getItem("token");
-
     await axios.put(
       `${SERVER_URL}/user/expense/updateExpense/${id}`,
       expenseData,

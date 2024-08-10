@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store/appStore";
 const App = () => {
   const token = useSelector((store: RootState) => store.user.token);
-  console.log("current token", token)
   return !token ? (
     <Navigate to="/Authentication" />
   ) : (

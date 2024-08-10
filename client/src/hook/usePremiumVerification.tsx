@@ -19,7 +19,6 @@ const usePremiumVerification = ({
           `${SERVER_URL}/user/purchase/verified-premium`,
           config,
         );
-        console.log("pv", response.data.status);
         if (response.data.status === "SUCCESSFUL") {
           setTogglePremiumButtom(true);
         }

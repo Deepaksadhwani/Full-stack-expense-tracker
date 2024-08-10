@@ -6,65 +6,50 @@ import {
   insertExpense,
   updateExpense,
 } from "../controllers/expenseController";
-import { authenticateToken, verifyToken } from "../utils/securityHelpers";
+import { authenticateToken,  } from "../utils/securityHelpers";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
 export const expenseRouter = express.Router();
 
-
-expenseRouter.post("/insertExpense", async (req, res) => {
+expenseRouter.post("/insertExpense", authenticateToken, async (req, res) => {
   const parsed = expenseEntrySchema.safeParse(req.body);
-
   if (parsed.success) {
-    const token: any = verifyToken(parsed.data.userId);
-    parsed.data.userId = token.id;
-    const response = await insertExpense(parsed.data);
+    const obj = { ...parsed.data, userId: req.userId };
+    await insertExpense(obj);
     res.status(201).json({
       message: "Expense entry is successfully added.",
-      data: response,
+      data: parsed.data,
     });
   } else {
     res.status(400).json({ message: "Failed to add expense entry." });
   }
 });
 
-expenseRouter.get("/accessExpenses", async (req, res) => {
-  const authtoken: any = req.headers["user-auth-token"]; // always access header information in lowercase even client send uppercase
-  if (!authtoken) {
-    return res.status(401).json({ message: "authorization is not accessed" });
-  }
-  const token: string = authtoken.split(" ")[1];
-  if (token) {
-    console.log("token", token);
-    const userData = verifyToken(token);
-    console.log("userdata", userData);
-    const { id }: any = userData;
-    console.log("access", id);
-    const response = await fetchUserExpenses(id);
-    res
-      .status(200)
-      .json({ message: "Expense successfully fetched.", data: response });
-  } else {
-    res.status(404).json({ message: "Invalid authorization." });
-    res.send("failed");
-  }
-});
-
-expenseRouter.delete("/deleteExpense/:id", authenticateToken,async (req, res) => {
-  const { id: stringId } = req.params;
-  const id = parseInt(stringId);
-  const response = await deleteExpense(id);
-  console.log(response);
+expenseRouter.get("/accessExpenses", authenticateToken, async (req, res) => {
+  const id: any = req.userId;
+  const response = await fetchUserExpenses(id);
   res
     .status(200)
-    .json({ message: "Expense is  successfully deleted.", data: response });
+    .json({ message: "Expense successfully fetched.", data: response });
 });
 
-expenseRouter.put("/updateExpense/:id",authenticateToken, async (req, res) => {
+expenseRouter.delete(
+  "/deleteExpense/:id",
+  authenticateToken,
+  async (req, res) => {
+    const { id: stringId } = req.params;
+    const id = parseInt(stringId);
+    const response = await deleteExpense(id);
+    res
+      .status(200)
+      .json({ message: "Expense is  successfully deleted.", data: response });
+  }
+);
+
+expenseRouter.put("/updateExpense/:id", authenticateToken, async (req, res) => {
   const { id: StringId } = req.params;
   const id = parseInt(StringId);
   const response = await updateExpense(id, req.body);
-  console.log(response);
   res
     .status(200)
     .json({ message: "Expense is successfully updated.", data: response });
