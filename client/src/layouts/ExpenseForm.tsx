@@ -57,13 +57,13 @@ const ExpenseForm = ({}) => {
             Category:
           </label>
           <select
-            className="focus:shadow-outline w-full appearance-none rounded border border-gray-400 px-3 py-2 leading-tight text-gray-700 focus:border-[#00215E] focus:outline-none"
+            className="w-full appearance-none rounded border border-gray-400 bg-white px-3 py-2 leading-tight text-gray-700 shadow-sm transition duration-150 ease-in-out focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             ref={category}
           >
             <option value="Food">Food</option>
             <option value="Entertainment">Entertainment</option>
             <option value="Transportation">Transportation</option>
-            <option value="Electronic">Electronic item</option>
+            <option value="Electronic">Electronic Item</option>
             <option value="Education">Education</option>
             <option value="Other">Other</option>
           </select>

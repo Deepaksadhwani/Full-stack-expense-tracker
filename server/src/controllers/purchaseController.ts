@@ -1,14 +1,15 @@
 import Razorpay from "razorpay";
 import dotenv from "dotenv";
-import { createOrder, fetchFirstRecentTransaction, updateOrder } from "../services/purchaseService";
+import {
+  createOrder,
+  fetchFirstRecentTransaction,
+  updateOrder,
+} from "../services/purchaseService";
 
 dotenv.config({ path: ".env" });
 
 const key_id: any = process.env.RAZROPAY_API_KEY;
 const key_secret = process.env.RAZORPAY_SECRET_KEY;
-
-
-
 
 /*----------------------Get last transaction for verification--------------------- */
 
@@ -16,12 +17,11 @@ export const lastSuccessfulTransaction = async (req: any, res: any) => {
   const id = req.userId;
   try {
     const response = await fetchFirstRecentTransaction(id);
-    res.status(200).json({ status: response.status });
+    res.status(200).json({ status: response });
   } catch (error) {
     res.status(500).json({ message: "internal error." });
   }
 };
-
 
 /*---------------------createOrder  controller---------------- */
 export const purchasePremium = async (req: any, res: any) => {

@@ -139,21 +139,32 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center space-x-3 text-xl font-semibold text-white">
-      {togglePremiumButtom &&  <div className="space-x-3"> <NavLink
-          to="/"
-          className={({ isActive }) => (isActive ? activeClass : undefined)}
-          onClick={() => setIsOpen(false)}
-        >
-          Home
-        </NavLink>
-        <NavLink
-          to="/report"
-          className={({ isActive }) => (isActive ? activeClass : undefined)}
-          onClick={() => setIsOpen(false)}
-        >
-          Report
-        </NavLink></div>}
-       
+        {togglePremiumButtom && (
+          <div className="space-x-3">
+            <NavLink
+              to="/"
+              className={({ isActive }) => (isActive ? activeClass : undefined)}
+              onClick={() => setIsOpen(false)}
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to="/leaderboard"
+              className={({ isActive }) => (isActive ? activeClass : undefined)}
+              onClick={() => setIsOpen(false)}
+            >
+              Leaderboard
+            </NavLink>
+            <NavLink
+              to="/report"
+              className={({ isActive }) => (isActive ? activeClass : undefined)}
+              onClick={() => setIsOpen(false)}
+            >
+              Report
+            </NavLink>
+          </div>
+        )}
+
         {!togglePremiumButtom && (
           <button
             onClick={checkoutHandler}

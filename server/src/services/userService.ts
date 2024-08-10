@@ -26,3 +26,26 @@ export const getUser = async (email: string) => {
   });
   return res;
 };
+
+export const insertTotalExpense = async (totalExpense: number, id: number) => {
+  await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      totalExpense,
+    },
+  });
+};
+
+export const fetchLeaderboardExpense = async () => {
+  const response = await prisma.user.findMany({
+    select: {
+      fullName: true,
+      totalExpense: true,
+    },
+  });
+  return response;
+};
+
+

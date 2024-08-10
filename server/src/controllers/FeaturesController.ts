@@ -1,6 +1,6 @@
 import { fetchDescendingExpense } from "../services/featuresService";
 
-export const getLeaderboard = async (req: any, res: any) => {
+export const getReport = async (req: any, res: any) => {
   const id = req.userId;
   try {
     const data = await fetchDescendingExpense(id);

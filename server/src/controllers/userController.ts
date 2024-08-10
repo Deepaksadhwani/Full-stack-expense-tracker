@@ -1,4 +1,9 @@
-import { getUser, insertUser } from "../services/userService";
+import {
+  fetchLeaderboardExpense,
+  getUser,
+  insertTotalExpense,
+  insertUser,
+} from "../services/userService";
 import {
   compareHashPassword,
   generateToken,
@@ -50,6 +55,32 @@ export const userSignin = async (req: any, res: any) => {
   } else {
     res.status(404).json({
       message: "User does not exist.",
+    });
+  }
+};
+
+export const insertTotalExpenseController = async (req: any, res: any) => {
+  const id = req.userId;
+  const { totalExpense: total } = req.body;
+  const totalExpense: number = parseInt(total);
+  try {
+    await insertTotalExpense(totalExpense, id);
+    res.status(201).json({ message: "Sum of expense added." });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+export const fetchLeaderboardExpenseController = async (req: any, res: any) => {
+  try {
+    const data = await fetchLeaderboardExpense();
+    res.status(200).json({
+      message: "Leaderboard expenses fetched successfully",
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
     });
   }
 };

@@ -7,6 +7,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import axios from "axios";
+import { SERVER_URL } from "@/utils/constants";
 
 const chartConfig: ChartConfig = {
   food: {
@@ -48,17 +50,21 @@ interface ExpenseChartProps {
 }
 
 export const ExpensePieChart: FC<ExpenseChartProps> = ({ expenseData }) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      "user-auth-token": `Bearer ${token}`,
+    },
+  };
   const categoryData = React.useMemo(() => {
     const result: { [key: string]: number } = {};
     expenseData.forEach((item) => {
-      const normalizedCategory = item.category
-        .toLowerCase()
-         // Adjust category format
+      const normalizedCategory = item.category.toLowerCase();
+      // Adjust category format
 
-      const categoryKey =
-        Object.keys(chartConfig).includes(normalizedCategory)
-          ? normalizedCategory
-          : 'other'; 
+      const categoryKey = Object.keys(chartConfig).includes(normalizedCategory)
+        ? normalizedCategory
+        : "other";
 
       if (result[categoryKey]) {
         result[categoryKey] += item.amount;
@@ -75,7 +81,13 @@ export const ExpensePieChart: FC<ExpenseChartProps> = ({ expenseData }) => {
   }, [expenseData]);
 
   const totalAmount = React.useMemo(() => {
-    return expenseData.reduce((acc, curr) => acc + curr.amount, 0);
+    const total = expenseData.reduce((acc, curr) => acc + curr.amount, 0);
+    axios.post(
+      `${SERVER_URL}/user/add-totalexpense`,
+      { totalExpense: total },
+      config,
+    );
+    return total;
   }, [expenseData]);
 
   return (

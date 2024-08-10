@@ -14,12 +14,13 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  fullName String
-  password String
-  expense  Expense[]
-  order    Order[]
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  fullName     String
+  password     String
+  totalExpense Int?
+  expense      Expense[]
+  order        Order[]
 }
 
 model Expense {

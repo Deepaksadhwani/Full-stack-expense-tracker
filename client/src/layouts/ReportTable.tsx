@@ -21,13 +21,13 @@ interface expenseListTypes {
 
 const ReportTable = () => {
   const [expenseList, setExpenseList] = useState<expenseListTypes[]>([]);
-  const [isSort, setIsSort] = useState<boolean>(false)
+  const [isSort, setIsSort] = useState<boolean>(false);
 
   const fetchDescExpenseData = async () => {
     const token = localStorage.getItem("token");
     const {
       data: { data },
-    } = await axios.get(`${SERVER_URL}/user/purchase//get-leaderboard`, {
+    } = await axios.get(`${SERVER_URL}/user/purchase//get-report`, {
       headers: {
         "user-auth-token": `Bearer ${token}`,
       },
@@ -37,55 +37,50 @@ const ReportTable = () => {
   };
 
   const toggleList = () => {
-    setIsSort(prev => !prev)
-  }
+    setIsSort((prev) => !prev);
+  };
   const filterExpenseHandler = () => {
     if (isSort) {
-        return [...expenseList].sort((a, b) => b.amount - a.amount); // this "-" minus is compare operator in sort function if b.amount - a.amount If b.amount is greater than a.amount, the result will be positive, which means b should come before a.
-    }else{
-        return expenseList
+      return [...expenseList].sort((a, b) => b.amount - a.amount); // this "-" minus is compare operator in sort function if b.amount - a.amount If b.amount is greater than a.amount, the result will be positive, which means b should come before a.
+    } else {
+      return expenseList;
     }
   };
 
   useEffect(() => {
-    
     fetchDescExpenseData();
   }, []);
 
   const sortedList = filterExpenseHandler();
   return (
-    <Table>
+    <Table >
       <TableCaption>A list of your recent expenses.</TableCaption>
       <TableHeader>
         <TableRow>
-        <TableHead >No.</TableHead>
+          <TableHead>No.</TableHead>
           <TableHead className="w-[100px]">Date</TableHead>
           <TableHead>Category</TableHead>
           <TableHead>Description</TableHead>
           <TableHead className="flex items-center justify-end gap-x-1">
             Amount
-            <button
-              onClick={toggleList}
-              className="text-lg text-gray-900"
-            >
+            <button onClick={toggleList} className="text-lg text-gray-900">
               <IoFilter />
             </button>
           </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {
-          sortedList.map((expense, index) => (
-            <TableRow key={index}>
-              <TableCell>{index+ 1}</TableCell>
-              <TableCell className="font-medium md:w-1/6">
-                {expense.date.slice(0, 10).split("-").reverse().join("-")}
-              </TableCell>
-              <TableCell>{expense.category}</TableCell>
-              <TableCell>{expense.description}</TableCell>
-              <TableCell className="text-right">₹{expense.amount}</TableCell>
-            </TableRow>
-          ))}
+        {sortedList.map((expense, index) => (
+          <TableRow key={index}>
+            <TableCell>{index + 1}</TableCell>
+            <TableCell className="font-medium md:w-1/6">
+              {expense.date.slice(0, 10).split("-").reverse().join("-")}
+            </TableCell>
+            <TableCell>{expense.category}</TableCell>
+            <TableCell>{expense.description}</TableCell>
+            <TableCell className="text-right">₹{expense.amount}</TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
