@@ -24,7 +24,7 @@ export const userSignup = async (req: any, res: any) => {
       data: { name, email },
     });
   } catch (error) {
-    res.status(500).json("Internal server error.");
+    res.status(500).json({message:"User already exists."});
   }
 };
 

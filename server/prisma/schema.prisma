@@ -14,13 +14,14 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  email        String    @unique
-  fullName     String
-  password     String
-  totalExpense Int?
-  expense      Expense[]
-  order        Order[]
+  id                     Int                      @id @default(autoincrement())
+  email                  String                   @unique
+  fullName               String
+  password               String
+  totalExpense           Int?
+  expense                Expense[]
+  order                  Order[]
+  ForgotPasswordRequests ForgotPasswordRequests[]
 }
 
 model Expense {
@@ -41,4 +42,11 @@ model Order {
   User      User?    @relation(fields: [userId], references: [id])
   userId    Int?
   createdAt DateTime @default(now())
+}
+
+model ForgotPasswordRequests {
+  id       String  @id @default(uuid())
+  isactive Boolean
+  User     User?   @relation(fields: [userId], references: [id])
+  userId   Int?
 }

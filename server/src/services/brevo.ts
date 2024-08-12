@@ -16,8 +16,7 @@ interface Receiver {
   email: string;
 }
 
-
-export const sendMail = async (receivers: Receiver[]) => {
+export const sendMail = async (receivers: Receiver[], uuid: string) => {
   const response = await tranEmailApi.sendTransacEmail({
     sender,
     to: receivers,
@@ -29,17 +28,16 @@ We received a request to reset the password for your account.
 
 To reset your password, please click the link below:
 
-[Reset Your Password](https://yourdomain.com/reset-password?token=YOUR_UNIQUE_TOKEN)
+[Reset Your Password](http://localhost:5173/newpassword/${uuid})
 
 If you did not request a password reset, please ignore this email or contact our support team if you have any concerns.
 
 Thank you,
-The YourCompany Team
+The Expense Tracker
 
-If you need further assistance, please contact us at support@yourdomain.com.
+If you need further assistance, please contact us at support@DeepakExpenseTracker.com.
     `,
   });
 
   console.log(response);
 };
-

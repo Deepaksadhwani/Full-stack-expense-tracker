@@ -50,14 +50,15 @@ const Authentication = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("userData", JSON.stringify(response.data.data));
       navigate("/");
-    } catch (error) {
-      setError(errorMessage);
+    } catch (error: any) {
+      console.log(error)
+      setError(error.response.data.message);
     }
   };
 
   const validateHandler = async () => {
     if (!isSign) {
-      authHandler("/user/sign-up", "User already exists.");
+      authHandler("/user/sign-up", "Invalid input found.");
     } else {
       authHandler("/user/sign-in", "404 User does not exist.");
     }
@@ -111,7 +112,10 @@ const Authentication = () => {
             type="password"
             placeholder="Password"
           />
-          <button onClick={()=> navigate("/forgetpassword")} className="font-semibold text-red-600">
+          <button
+            onClick={() => navigate("/forgetpassword")}
+            className="font-semibold text-red-600"
+          >
             Forget password?
           </button>
           <p className="font-medium text-red-800">{error}</p>

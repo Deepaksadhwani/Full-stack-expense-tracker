@@ -16,12 +16,10 @@ const ForgotPassword = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        `${SERVER_URL}/user/password/forgotpassword `,
-        {
-          email: email.current?.value,
-        },
-      );
+      const res = await axios.post(`${SERVER_URL}/password/forgotpassword `, {
+        email: email.current?.value,
+      });
+      console.log(res);
       toast.success("Please check your email for verification🦋", {
         duration: 3000,
       });
@@ -32,6 +30,9 @@ const ForgotPassword = () => {
     } catch (error) {
       setStatus(false);
       setStatusText("Invalid email address found.");
+      if (email.current) {
+        email.current.value = "";
+      }
     }
   };
 

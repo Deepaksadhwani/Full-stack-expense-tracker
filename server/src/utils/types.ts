@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const authValidationSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string(),
 });
 
 export const expenseEntrySchema = z.object({
@@ -14,4 +14,9 @@ export const expenseEntrySchema = z.object({
 
 export const mailSchema = z.object({
   email: z.string().email(),
+});
+
+export const resetPasswordSchema = z.object({
+  uuid: z.string(),
+  password: z.string(),
 });

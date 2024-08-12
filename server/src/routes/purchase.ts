@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import express from "express";
 import {
   lastSuccessfulTransaction,
@@ -7,7 +6,6 @@ import {
 } from "../controllers/purchaseController";
 import { authenticateToken } from "../utils/securityHelpers";
 import { getReport } from "../controllers/FeaturesController";
-dotenv.config({ path: ".env" });
 export const purchaseRouter = express.Router();
 
 purchaseRouter.use(authenticateToken);
