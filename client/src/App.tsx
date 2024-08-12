@@ -1,4 +1,3 @@
-import { Toaster } from "react-hot-toast";
 import { Navigate, Outlet } from "react-router-dom";
 import Navbar from "./layouts/Navbar";
 import { useSelector } from "react-redux";
@@ -9,7 +8,6 @@ const App = () => {
     <Navigate to="/Authentication" />
   ) : (
     <div>
-      <Toaster />
       <Navbar />
       <Outlet />
     </div>

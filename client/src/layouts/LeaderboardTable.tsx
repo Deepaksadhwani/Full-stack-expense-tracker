@@ -41,7 +41,7 @@ const LeaderboardTable = () => {
 
   return (
     <Table >
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>Leaderboard: Top Spenders</TableCaption>
       <TableHeader>
         <TableRow >
           <TableHead className="w-[100px]">No.</TableHead>

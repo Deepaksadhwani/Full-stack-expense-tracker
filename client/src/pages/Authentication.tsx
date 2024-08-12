@@ -111,7 +111,7 @@ const Authentication = () => {
             type="password"
             placeholder="Password"
           />
-          <button className="font-semibold text-red-600">
+          <button onClick={()=> navigate("/forgetpassword")} className="font-semibold text-red-600">
             Forget password?
           </button>
           <p className="font-medium text-red-800">{error}</p>
