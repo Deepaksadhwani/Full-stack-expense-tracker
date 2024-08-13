@@ -21,6 +21,7 @@ const NewPassword = () => {
       toast.success("Password has been successfully changed.", {
         duration: 4000,
       });
+      setPassword("")
     } catch (error) {
       setPassword("");
       setError("Verification link is expired, try again.");

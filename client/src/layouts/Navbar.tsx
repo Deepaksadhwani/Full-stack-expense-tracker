@@ -133,9 +133,21 @@ const Navbar = () => {
           alt=""
           className="w-20 rounded-full shadow-md shadow-cyan-200 transition-all duration-100"
         />
-        <h1 className="hidden text-4xl font-semibold italic tracking-tight text-yellow-500 transition-all duration-1000 md:block">
-          Expense Tracker
-        </h1>
+        {!togglePremiumButtom ? (
+          <h1 className="hidden text-4xl font-semibold italic tracking-tight text-yellow-500 transition-all duration-1000 md:block">
+            Expense Tracker
+          </h1>
+        ) : (
+          <h1 className="items-center space-x-2 text-4xl  font-semibold italic tracking-tight text-yellow-500 transition-all duration-1000 flex">
+            <h1>Expense</h1>
+            <button
+              className="hidden rounded-lg  italic tracking-tight px-3 bg-blue-500 p-2 text-3xl font-bold text-white transition-all duration-300 hover:bg-blue-700 sm:block"
+              onClick={handleDownloadExpenseFile}
+            >
+              Download
+            </button>
+          </h1>
+        )}
       </div>
 
       <div className="flex items-center space-x-3 text-xl font-semibold text-white">
