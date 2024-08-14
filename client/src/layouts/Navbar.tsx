@@ -12,6 +12,7 @@ import axios from "axios";
 import { SERVER_URL } from "@/utils/constants";
 import toast from "react-hot-toast";
 import usePremiumVerification from "@/hook/usePremiumVerification";
+import { FaHistory } from "react-icons/fa";
 
 const Navbar = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,7 +30,6 @@ const Navbar = () => {
       "user-auth-token": `Bearer ${token}`,
     },
   };
-  const image = NavLogo;
 
   //custom hook
   usePremiumVerification({ SERVER_URL, config, setTogglePremiumButtom });
@@ -145,9 +145,10 @@ const Navbar = () => {
     <div className="relative flex items-center justify-between bg-[#00215E] px-4 py-2 sm:px-10">
       <div className="flex items-center space-x-4">
         <img
+          onClick={()=> navigate("/")}
           src={NavLogo}
           alt=""
-          className="w-20 rounded-full shadow-md shadow-cyan-200 transition-all duration-100"
+          className="w-20 cursor-pointer rounded-full shadow-md shadow-cyan-200 transition-all duration-100"
         />
         {!togglePremiumButtom ? (
           <h1 className="hidden text-4xl font-semibold italic tracking-tight text-yellow-500 transition-all duration-1000 md:block">
@@ -161,6 +162,12 @@ const Navbar = () => {
               onClick={handleDownloadExpenseFile}
             >
               Download
+            </button>
+            <button
+              onClick={()=> navigate("/download-history")}
+              className="hidden rounded-lg bg-lime-600 p-2 px-3 text-3xl font-bold italic tracking-tight text-white transition-all duration-300 hover:bg-blue-700 sm:block"
+            >
+              <FaHistory/>
             </button>
           </h1>
         )}
@@ -201,10 +208,7 @@ const Navbar = () => {
             Buy Premium
           </button>
         )}
-        <img
-          src={image}
-          className="m-1 h-14 w-16 rounded-lg border border-gray-700 object-cover"
-        />
+       
         <div
           onClick={() => setIsOpen((prev) => !prev)}
           className="group/testing hidden cursor-pointer select-none items-center space-x-3 rounded-md border-2 border-black bg-yellow-300 px-3 py-3 font-semibold text-[#00215E] transition-all duration-200 hover:scale-[1.04] sm:flex"

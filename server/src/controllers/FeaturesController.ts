@@ -5,6 +5,7 @@ import {
   fetchLeaderboardExpense,
 } from "../services/featuresService";
 import dotenv from "dotenv";
+import { insertExpenseDownloadRecord } from "../services/historyService";
 dotenv.config();
 
 export const getReport = async (req: any, res: any) => {
@@ -41,7 +42,8 @@ export const downloadExpenseController = async (req: any, res: any) => {
     const expenses = await fetchUserExpenses(id);
     const stringifiedExpenses = JSON.stringify(expenses);
     const fileName = `expense${id}/${new Date()}.txt`;
-    const fileURL = await uploadToS3(stringifiedExpenses, fileName);
+    const fileURL: any = await uploadToS3(stringifiedExpenses, fileName);
+    await insertExpenseDownloadRecord(id, fileURL);
     res.status(200).json({ fileURL, success: true });
   } catch (error) {
     res.status(500).json({ fileUrL: "", success: false, error });

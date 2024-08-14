@@ -11,6 +11,7 @@ import LeaderBoard from "./pages/LeaderBoard.tsx";
 import ForgotPassword from "./pages/ForgetPassword.tsx";
 import { Toaster } from "react-hot-toast";
 import NewPassword from "./pages/NewPassword.tsx";
+import DownloadHistory from "./pages/DownloadHistory.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={appStore}>
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route index element={<Home />} />
           <Route path="/report" element={<Report />} />
           <Route path="/leaderboard" element={<LeaderBoard />} />
+          <Route path="/download-history" element={<DownloadHistory />} />
         </Route>
         <Route path="/Authentication" element={<Authentication />} />
         <Route path="/forgetpassword" element={<ForgotPassword />} />

@@ -10,7 +10,6 @@ import {
 import { SERVER_URL } from "@/utils/constants";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { IoFilter } from "react-icons/io5";
 
 interface expenseListTypes {
   fullName: string;

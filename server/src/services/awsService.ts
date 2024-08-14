@@ -16,7 +16,7 @@ export const uploadToS3 = async (data: any, fileName: string) => {
     Body: data,
     ACL: "public-read",
     ContentType: "text/plain",
-    ContentDisposition: 'attachment; filename="myexpense.csv"',
+    ContentDisposition: 'attachment; filename="myexpense.txt"',
   };
 
   return new Promise((resolve, reject) => {
