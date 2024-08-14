@@ -16,8 +16,14 @@ export const insertExpenseDownloadRecord = async (
   return res;
 };
 
-export const getExpenseDownloadRecord = async (userId: number) => {
-  const res = await prisma.downloadHistory.findMany({
+export const getExpenseDownloadRecord = async (
+  userId: number,
+  skip?: number,
+  limit?: number
+) => {
+  const downloadRecord = await prisma.downloadHistory.findMany({
+    skip: skip ?? undefined,
+    take: limit ?? undefined,
     where: {
       userId,
     },
@@ -26,5 +32,10 @@ export const getExpenseDownloadRecord = async (userId: number) => {
       updateAt: true,
     },
   });
-  return res;
+  const totalDownloadRecord = await prisma.downloadHistory.count({
+    where: {
+      userId
+    }
+  })
+  return {downloadRecord,totalDownloadRecord};
 };

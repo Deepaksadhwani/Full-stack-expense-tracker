@@ -2,8 +2,14 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const fetchDescendingExpense = async (id: number) => {
+export const fetchDescendingExpense = async (
+  id: number,
+  skip?: number,
+  limit?: number
+) => {
   const UserExpense = await prisma.expense.findMany({
+    skip: skip ?? undefined,
+    take: limit ?? undefined,
     where: {
       userId: id,
     },
@@ -17,18 +23,29 @@ export const fetchDescendingExpense = async (id: number) => {
       date: true,
     },
   });
-  return UserExpense;
+
+  const totalExpenses = await prisma.expense.count({
+    where: {
+      userId: id,
+    },
+  });
+
+  return { UserExpense, totalExpenses };
 };
 
-
 /*--------------- get leaderboard----------------- */
-export const fetchLeaderboardExpense = async () => {
-  const response = await prisma.user.findMany({
+export const fetchLeaderboardExpense = async (
+  skip?: number,
+  limit?: number
+) => {
+  const leaderboardExpense = await prisma.user.findMany({
+    skip: skip ?? undefined,
+    take: limit ?? undefined,
     select: {
       fullName: true,
       totalExpense: true,
     },
   });
-  return response;
+  const totalLeaderboardExpense = await prisma.user.count();
+  return { leaderboardExpense, totalLeaderboardExpense };
 };
-

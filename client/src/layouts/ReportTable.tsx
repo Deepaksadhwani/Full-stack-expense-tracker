@@ -10,7 +10,6 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -22,7 +21,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { IoFilter } from "react-icons/io5";
 
-interface expenseListTypes {
+interface ExpenseListTypes {
   amount: number;
   category: string;
   date: string;
@@ -30,65 +29,39 @@ interface expenseListTypes {
 }
 
 const ReportTable = () => {
-  const [expenseList, setExpenseList] = useState<expenseListTypes[]>([]);
+  const [expenseList, setExpenseList] = useState<ExpenseListTypes[]>([]);
   const [isSort, setIsSort] = useState<boolean>(false);
-  const rowsPerPage: number = 10;
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(expenseList.length / rowsPerPage);
-  const fetchDescExpenseData = async () => {
+  const [totalPages, setTotalPages] = useState(1);
+
+  // Fetches expenses data with pagination
+  const fetchDescExpenseData = async (page: number) => {
     const token = localStorage.getItem("token");
     const {
-      data: { data },
-    } = await axios.get(`${SERVER_URL}/user/premium-features/get-report`, {
-      headers: {
-        "user-auth-token": `Bearer ${token}`,
-      },
-    });
-    console.log(data);
+      data: { data, meta },
+    } = await axios.get(
+      `${SERVER_URL}/user/premium-features/get-report?page=${page}&limit=10`,
+      {
+        headers: {
+          "user-auth-token": `Bearer ${token}`,
+        },
+      }
+    );
     setExpenseList(data);
+    setTotalPages(meta.totalPages);
   };
 
+  // Toggle sorting logic
   const toggleList = () => {
     setIsSort((prev) => !prev);
   };
-  const filterExpenseHandler = () => {
-    if (isSort) {
-      return [...expenseList].sort((a, b) => b.amount - a.amount); // this "-" minus is compare operator in sort function if b.amount - a.amount If b.amount is greater than a.amount, the result will be positive, which means b should come before a.
-    } else {
-      return expenseList;
-    }
-  };
-
-  /*---------------pagination logic-----------------*/
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const renderPageNumbers = () => {
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(
-        <PaginationItem key={i}>
-          <PaginationLink
-            onClick={() => handlePageChange(i)}
-            className={i === currentPage ? "bg-black text-xl text-white" : ""}
-          >
-            {i}
-          </PaginationLink>
-        </PaginationItem>,
-      );
-    }
-    return pages;
-  };
 
   useEffect(() => {
-    fetchDescExpenseData();
-  }, []);
+    fetchDescExpenseData(currentPage);
+  }, [currentPage, isSort]);
 
-  const sortedList = filterExpenseHandler();
   return (
     <>
- 
       <Table className="mb-4">
         <TableCaption>A list of your recent expenses.</TableCaption>
         <TableHeader>
@@ -106,22 +79,18 @@ const ReportTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedList.length > 0 &&
-            sortedList
-              .slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-              .map((expense, index) => (
-                <TableRow key={index}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell className="font-medium md:w-1/6">
-                    {expense.date.slice(0, 10).split("-").reverse().join("-")}
-                  </TableCell>
-                  <TableCell>{expense.category}</TableCell>
-                  <TableCell>{expense.description}</TableCell>
-                  <TableCell className="text-right">
-                    ₹{expense.amount}
-                  </TableCell>
-                </TableRow>
-              ))}
+          {expenseList.length > 0 &&
+            expenseList.map((expense, index) => (
+              <TableRow key={index}>
+                <TableCell>{index + 1 + (currentPage - 1) * 10}</TableCell>
+                <TableCell className="font-medium md:w-1/6">
+                  {expense.date.slice(0, 10).split("-").reverse().join("-")}
+                </TableCell>
+                <TableCell>{expense.category}</TableCell>
+                <TableCell>{expense.description}</TableCell>
+                <TableCell className="text-right">₹{expense.amount}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
       <Pagination>
@@ -129,30 +98,28 @@ const ReportTable = () => {
           <PaginationItem>
             <PaginationPrevious
               href="#"
-              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-              className={
-                currentPage === 1 ? "pointer-events-none opacity-50" : ""
-              }
+              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+              className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
             />
           </PaginationItem>
 
-          {renderPageNumbers()}
-
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
+          {[...Array(totalPages)].map((_, i) => (
+            <PaginationItem key={i + 1}>
+              <PaginationLink
+                href="#"
+                onClick={() => setCurrentPage(i + 1)}
+                className={i + 1 === currentPage ? "bg-black text-xl text-white" : ""}
+              >
+                {i + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
 
           <PaginationItem>
             <PaginationNext
               href="#"
-              onClick={() =>
-                handlePageChange(Math.min(totalPages, currentPage + 1))
-              }
-              className={
-                currentPage === totalPages
-                  ? "pointer-events-none opacity-50"
-                  : ""
-              }
+              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+              className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
             />
           </PaginationItem>
         </PaginationContent>
