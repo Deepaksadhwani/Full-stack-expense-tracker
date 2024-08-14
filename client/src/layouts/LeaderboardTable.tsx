@@ -7,6 +7,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
 import { SERVER_URL } from "@/utils/constants";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -18,6 +29,33 @@ interface expenseListTypes {
 
 const LeaderboardTable = () => {
   const [expenseList, setExpenseList] = useState<expenseListTypes[]>([]);
+  const rowsPerPage: number = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(expenseList.length / rowsPerPage);
+
+
+  /*pagination logic */
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const renderPageNumbers = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <PaginationItem key={i}>
+          <PaginationLink
+            onClick={() => handlePageChange(i)}
+            className={i === currentPage ? "text-white  text-xl bg-black" : ""}
+          >
+            {i}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+    return pages;
+  };
+
 
   useEffect(() => {
     const fetchLeaderBoardExpense = async () => {
@@ -42,7 +80,8 @@ const LeaderboardTable = () => {
   }, []);
 
   return (
-    <Table>
+    <>
+      <Table className="mb-4">
       <TableCaption>Leaderboard: Top Spenders</TableCaption>
       <TableHeader>
         <TableRow>
@@ -52,7 +91,7 @@ const LeaderboardTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {expenseList &&
+        {expenseList.length > 0  &&
           expenseList.map((expense, index) => (
             <TableRow key={index}>
               <TableCell className="font-medium">{index + 1}</TableCell>
@@ -64,6 +103,41 @@ const LeaderboardTable = () => {
           ))}
       </TableBody>
     </Table>
+     <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+              className={
+                currentPage === 1 ? "pointer-events-none opacity-50" : ""
+              }
+            />
+          </PaginationItem>
+
+          {renderPageNumbers()}
+
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={() =>
+                handlePageChange(Math.min(totalPages, currentPage + 1))
+              }
+              className={
+                currentPage === totalPages
+                  ? "pointer-events-none opacity-50"
+                  : ""
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </>
+  
   );
 };
 
