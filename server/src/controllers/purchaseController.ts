@@ -28,7 +28,7 @@ export const purchasePremium = async (req: any, res: any) => {
   const id = req.userId;
   try {
     const options = {
-      amount: 2500,
+      amount: 50000,
       currency: "INR",
     };
     const rpz = new Razorpay({

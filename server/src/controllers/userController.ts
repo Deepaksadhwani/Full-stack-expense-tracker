@@ -1,5 +1,4 @@
 import {
-  fetchLeaderboardExpense,
   getUser,
   insertTotalExpense,
   insertUser,
@@ -24,7 +23,7 @@ export const userSignup = async (req: any, res: any) => {
       data: { name, email },
     });
   } catch (error) {
-    res.status(500).json({message:"User already exists."});
+    res.status(500).json({ message: "User already exists." });
   }
 };
 
@@ -68,19 +67,5 @@ export const insertTotalExpenseController = async (req: any, res: any) => {
     res.status(201).json({ message: "Sum of expense added." });
   } catch (error) {
     res.status(500).json({ message: "Internal server error." });
-  }
-};
-
-export const fetchLeaderboardExpenseController = async (req: any, res: any) => {
-  try {
-    const data = await fetchLeaderboardExpense();
-    res.status(200).json({
-      message: "Leaderboard expenses fetched successfully",
-      data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Internal server error",
-    });
   }
 };

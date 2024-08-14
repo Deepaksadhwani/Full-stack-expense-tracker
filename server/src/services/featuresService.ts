@@ -19,3 +19,16 @@ export const fetchDescendingExpense = async (id: number) => {
   });
   return UserExpense;
 };
+
+
+/*--------------- get leaderboard----------------- */
+export const fetchLeaderboardExpense = async () => {
+  const response = await prisma.user.findMany({
+    select: {
+      fullName: true,
+      totalExpense: true,
+    },
+  });
+  return response;
+};
+

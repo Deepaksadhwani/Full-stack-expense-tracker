@@ -38,14 +38,4 @@ export const insertTotalExpense = async (totalExpense: number, id: number) => {
   });
 };
 
-export const fetchLeaderboardExpense = async () => {
-  const response = await prisma.user.findMany({
-    select: {
-      fullName: true,
-      totalExpense: true,
-    },
-  });
-  return response;
-};
-
 

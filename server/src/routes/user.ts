@@ -1,12 +1,10 @@
 import express from "express";
 import {
-  fetchLeaderboardExpenseController,
   insertTotalExpenseController,
   userSignin,
   userSignup,
 } from "../controllers/userController";
 import { authenticateToken } from "../utils/securityHelpers";
-
 
 export const userRouter = express.Router();
 
@@ -17,9 +15,3 @@ userRouter.post(
   authenticateToken,
   insertTotalExpenseController
 );
-userRouter.get(
-  "/get-leaderboard",
-  authenticateToken,
-  fetchLeaderboardExpenseController
-);
-

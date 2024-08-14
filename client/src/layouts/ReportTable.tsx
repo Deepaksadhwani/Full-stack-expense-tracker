@@ -27,7 +27,7 @@ const ReportTable = () => {
     const token = localStorage.getItem("token");
     const {
       data: { data },
-    } = await axios.get(`${SERVER_URL}/user/purchase//get-report`, {
+    } = await axios.get(`${SERVER_URL}/user/premium-features/get-report`, {
       headers: {
         "user-auth-token": `Bearer ${token}`,
       },

@@ -96,7 +96,23 @@ const Navbar = () => {
     // razor.open();
   };
 
-  const handleDownloadExpenseFile = () => {
+  const handleDownloadExpenseFile = async () => {
+    try {
+      const { data } = await axios.get(
+        `${SERVER_URL}/user/premium-features/download`,
+        config,
+      );
+      console.log(data.fileURL);
+      const a = document.createElement("a");
+      a.href = data.fileURL;
+      a.download = "myexpenses.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (error) {
+      console.log("Something went wrong", error);
+    }
+
     // const expenseDataArray = Object.values(expenseData);
     // const csvContent = [
     //   ["Description", "Amount", "Category", "Date"].join(","),
@@ -138,10 +154,10 @@ const Navbar = () => {
             Expense Tracker
           </h1>
         ) : (
-          <h1 className="items-center space-x-2 text-4xl  font-semibold italic tracking-tight text-yellow-500 transition-all duration-1000 flex">
+          <h1 className="flex items-center space-x-2 text-4xl font-semibold italic tracking-tight text-yellow-500 transition-all duration-1000">
             <h1>Expense</h1>
             <button
-              className="hidden rounded-lg  italic tracking-tight px-3 bg-blue-500 p-2 text-3xl font-bold text-white transition-all duration-300 hover:bg-blue-700 sm:block"
+              className="hidden rounded-lg bg-blue-500 p-2 px-3 text-3xl font-bold italic tracking-tight text-white transition-all duration-300 hover:bg-blue-700 sm:block"
               onClick={handleDownloadExpenseFile}
             >
               Download

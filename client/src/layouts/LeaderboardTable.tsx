@@ -25,11 +25,14 @@ const LeaderboardTable = () => {
       const token = localStorage.getItem("token");
       const {
         data: { data },
-      } = await axios.get(`${SERVER_URL}/user/get-leaderboard`, {
-        headers: {
-          "user-auth-token": `Bearer ${token}`,
+      } = await axios.get(
+        `${SERVER_URL}/user/premium-features/get-leaderboard`,
+        {
+          headers: {
+            "user-auth-token": `Bearer ${token}`,
+          },
         },
-      });
+      );
       const filterData = data.sort(
         (a: expenseListTypes, b: expenseListTypes) =>
           b.totalExpense - a.totalExpense,
@@ -40,10 +43,10 @@ const LeaderboardTable = () => {
   }, []);
 
   return (
-    <Table >
+    <Table>
       <TableCaption>Leaderboard: Top Spenders</TableCaption>
       <TableHeader>
-        <TableRow >
+        <TableRow>
           <TableHead className="w-[100px]">No.</TableHead>
           <TableHead>User Name</TableHead>
           <TableHead className="w-2/6 text-right">Amount</TableHead>
@@ -52,8 +55,8 @@ const LeaderboardTable = () => {
       <TableBody>
         {expenseList &&
           expenseList.map((expense, index) => (
-            <TableRow key={index }>
-              <TableCell className="font-medium">{index +1}</TableCell>
+            <TableRow key={index}>
+              <TableCell className="font-medium">{index + 1}</TableCell>
               <TableCell>{expense.fullName}</TableCell>
               <TableCell className="w-2/6 text-right">
                 ₹{expense.totalExpense}
