@@ -28,7 +28,7 @@ We received a request to reset the password for your account.
 
 To reset your password, please click the link below:
 
-[Reset Your Password](http://localhost:5173/newpassword/${uuid})
+[Reset Your Password](https://full-stack-expense-tracker.netlify.app/newpassword/${uuid})
 
 If you did not request a password reset, please ignore this email or contact our support team if you have any concerns.
 
