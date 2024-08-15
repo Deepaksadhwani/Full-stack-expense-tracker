@@ -20,6 +20,7 @@ import { SERVER_URL } from "@/utils/constants";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { IoFilter } from "react-icons/io5";
+import Shimmer from "@/components/Shimmer";
 
 interface ExpenseListTypes {
   amount: number;
@@ -33,9 +34,11 @@ const ReportTable = () => {
   const [isSort, setIsSort] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   // Fetches expenses data with pagination
   const fetchDescExpenseData = async (page: number) => {
+    setLoading(true);
     const token = localStorage.getItem("token");
     const {
       data: { data, meta },
@@ -58,6 +61,7 @@ const ReportTable = () => {
     } else {
       setExpenseList(data);
     }
+    setLoading(false);
   };
 
   // Toggle amount sorting logic
@@ -69,7 +73,9 @@ const ReportTable = () => {
     fetchDescExpenseData(currentPage);
   }, [currentPage, isSort]);
 
-  return (
+  return loading ? (
+    <Shimmer />
+  ) : (
     <>
       <Table className="mb-4">
         <TableCaption>A list of your recent expenses.</TableCaption>

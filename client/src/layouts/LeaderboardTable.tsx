@@ -20,6 +20,7 @@ import {
 import { SERVER_URL } from "@/utils/constants";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Shimmer from "@/components/Shimmer";
 
 interface ExpenseListTypes {
   fullName: string;
@@ -30,8 +31,11 @@ const LeaderboardTable = () => {
   const [expenseList, setExpenseList] = useState<ExpenseListTypes[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false)
+
 
   const fetchLeaderBoardExpense = async (page: number) => {
+    setLoading(true)
     const token = localStorage.getItem("token");
     const {
       data: { data, meta },
@@ -45,13 +49,14 @@ const LeaderboardTable = () => {
     );
     setExpenseList(data);
     setTotalPages(meta.totalPages);  // Backend returns total pages
+    setLoading(false)
   };
 
   useEffect(() => {
     fetchLeaderBoardExpense(currentPage);
   }, [currentPage]);
 
-  return (
+  return loading ? <Shimmer/> : (
     <>
       <Table className="mb-4">
         <TableCaption>Leaderboard: Top Spenders</TableCaption>

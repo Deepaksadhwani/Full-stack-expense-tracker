@@ -56,14 +56,14 @@ const Home = () => {
           </div>
         )}
       </div>
-      {expenseData.length > 0 && (
+      { expenseData && expenseData.length > 0 && (
         <div className="flex h-[50%] flex-col justify-evenly md:flex-row">
           <ExpensePieChart expenseData={expenseData} />
           <ExpenseBarChart expenseData={expenseData} />
         </div>
       )}
       <div className="flex w-full flex-wrap justify-center space-x-10 sm:flex-row">
-        {expenseData.length > 0 &&
+        {expenseData && expenseData.length > 0 &&
           expenseData.map((item: DataType) => (
             <div className="" key={item.id}>
               <ExpenseCard

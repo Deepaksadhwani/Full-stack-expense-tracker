@@ -3,7 +3,7 @@ import AWS from "aws-sdk";
 export const uploadToS3 = async (data: any, fileName: string) => {
   const BUCKET_NAME = "full-stack-expense-tracker";
   const IAM_USER_KEY_ID = process.env.AWS_SECRET_KEY_ID;
-  const IAM_USER_SECRET_KEY = process.env.AWS_SECRET_KEY;
+  const IAM_USER_SECRET_KEY = process.env.AWS_SECRET__KEY;
 
   const s3Bucket = new AWS.S3({
     accessKeyId: IAM_USER_KEY_ID,

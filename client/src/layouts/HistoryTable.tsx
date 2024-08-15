@@ -22,6 +22,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaFileDownload } from "react-icons/fa";
+import Shimmer from "@/components/Shimmer";
 
 const HistoryTable = () => {
   interface ExpenseRecordListTypes {
@@ -32,8 +33,10 @@ const HistoryTable = () => {
   const [expenseRecordList, setExpenseRecordList] = useState<ExpenseRecordListTypes[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false)
 
   const fetchExpenseRecords = async (page: number) => {
+    setLoading(true)
     const token = localStorage.getItem("token");
     const {
       data: { data, meta },
@@ -45,15 +48,17 @@ const HistoryTable = () => {
         },
       }
     );
+  
     setExpenseRecordList(data);
     setTotalPages(meta.totalPages);
+    setLoading(false)
   };
 
   useEffect(() => {
     fetchExpenseRecords(currentPage);
   }, [currentPage]);
 
-  return (
+  return loading ? <Shimmer/> : ( 
     <>
       <Table className="w-full mb-4 table-auto">
         <TableCaption>Downloaded Expense File Archive</TableCaption>
