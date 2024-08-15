@@ -106,11 +106,9 @@ const HistoryTable = () => {
               className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
             />
           </PaginationItem>
-
           {[...Array(totalPages)].map((_, i) => (
             <PaginationItem key={i + 1}>
               <PaginationLink
-                href="#"
                 onClick={() => setCurrentPage(i + 1)}
                 className={i + 1 === currentPage ? "bg-black text-xl text-white" : ""}
               >

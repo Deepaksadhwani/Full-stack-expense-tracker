@@ -12,7 +12,6 @@ export const insertExpenseDownloadRecord = async (
       url,
     },
   });
-  console.log(res);
   return res;
 };
 

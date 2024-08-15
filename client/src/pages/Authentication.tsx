@@ -51,7 +51,6 @@ const Authentication = () => {
       localStorage.setItem("userData", JSON.stringify(response.data.data));
       navigate("/");
     } catch (error: any) {
-      console.log(error)
       setError(error.response.data.message);
     }
   };

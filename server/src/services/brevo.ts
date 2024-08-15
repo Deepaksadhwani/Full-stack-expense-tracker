@@ -39,5 +39,4 @@ If you need further assistance, please contact us at support@DeepakExpenseTracke
     `,
   });
 
-  console.log(response);
 };

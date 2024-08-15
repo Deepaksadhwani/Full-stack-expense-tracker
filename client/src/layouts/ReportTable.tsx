@@ -45,13 +45,22 @@ const ReportTable = () => {
         headers: {
           "user-auth-token": `Bearer ${token}`,
         },
-      }
+      },
     );
-    setExpenseList(data);
     setTotalPages(meta.totalPages);
+
+    if (isSort) {
+      setExpenseList(
+        data.sort(
+          (a: ExpenseListTypes, b: ExpenseListTypes) => b.amount - a.amount,
+        ),
+      ); // this "-" minus is compare operator in sort function if b.amount - a.amount If b.amount is greater than a.amount, the result will be positive, which means b should come before a.
+    } else {
+      setExpenseList(data);
+    }
   };
 
-  // Toggle sorting logic
+  // Toggle amount sorting logic
   const toggleList = () => {
     setIsSort((prev) => !prev);
   };
@@ -99,7 +108,9 @@ const ReportTable = () => {
             <PaginationPrevious
               href="#"
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-              className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+              className={
+                currentPage === 1 ? "pointer-events-none opacity-50" : ""
+              }
             />
           </PaginationItem>
 
@@ -108,7 +119,9 @@ const ReportTable = () => {
               <PaginationLink
                 href="#"
                 onClick={() => setCurrentPage(i + 1)}
-                className={i + 1 === currentPage ? "bg-black text-xl text-white" : ""}
+                className={
+                  i + 1 === currentPage ? "bg-black text-xl text-white" : ""
+                }
               >
                 {i + 1}
               </PaginationLink>
@@ -118,8 +131,14 @@ const ReportTable = () => {
           <PaginationItem>
             <PaginationNext
               href="#"
-              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-              className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+              onClick={() =>
+                setCurrentPage(Math.min(totalPages, currentPage + 1))
+              }
+              className={
+                currentPage === totalPages
+                  ? "pointer-events-none opacity-50"
+                  : ""
+              }
             />
           </PaginationItem>
         </PaginationContent>

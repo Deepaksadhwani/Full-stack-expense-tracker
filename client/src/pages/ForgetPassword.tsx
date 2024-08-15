@@ -19,7 +19,6 @@ const ForgotPassword = () => {
       const res = await axios.post(`${SERVER_URL}/password/forgotpassword `, {
         email: email.current?.value,
       });
-      console.log(res);
       toast.success("Please check your email for verification🦋", {
         duration: 3000,
       });

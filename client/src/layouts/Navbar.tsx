@@ -102,7 +102,6 @@ const Navbar = () => {
         `${SERVER_URL}/user/premium-features/download`,
         config,
       );
-      console.log(data.fileURL);
       const a = document.createElement("a");
       a.href = data.fileURL;
       a.download = "myexpenses.csv";
@@ -110,7 +109,7 @@ const Navbar = () => {
       a.click();
       a.remove();
     } catch (error) {
-      console.log("Something went wrong", error);
+     throw new Error("An error occurred.")
     }
 
     // const expenseDataArray = Object.values(expenseData);
