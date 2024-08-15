@@ -1,1 +1,2 @@
-export const SERVER_URL = "http://localhost:3000/api/v1";
+export const SERVER_URL =
+  "https://full-stack-expense-tracker-1.onrender.com/api/v1";

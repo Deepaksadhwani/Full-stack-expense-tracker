@@ -1,11 +1,9 @@
-import Shimmer from "@/components/Shimmer";
 import { AppDispatch } from "@/store/appStore";
 import { insertExpense } from "@/store/slices/expenseSlice";
-import { useRef, useState } from "react";
+import { useRef} from "react";
 import { useDispatch } from "react-redux";
 
 const ExpenseForm = ({}) => {
-  const [loading, setLoading] = useState<boolean>(false);
   const amount = useRef<HTMLInputElement>(null);
   const description = useRef<HTMLInputElement>(null);
   const category = useRef<HTMLSelectElement>(null);
@@ -25,9 +23,7 @@ const ExpenseForm = ({}) => {
     dispatch(insertExpense(expenseEntry));
   };
 
-  return loading ? (
-    <Shimmer />
-  ) : (
+  return  (
     <div className="mx-auto mb-5 mt-5 max-w-4xl rounded-lg bg-white">
       <form
         onSubmit={handleSubmit}

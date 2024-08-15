@@ -16,7 +16,7 @@ const ForgotPassword = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${SERVER_URL}/password/forgotpassword `, {
+       await axios.post(`${SERVER_URL}/password/forgotpassword `, {
         email: email.current?.value,
       });
       toast.success("Please check your email for verification🦋", {

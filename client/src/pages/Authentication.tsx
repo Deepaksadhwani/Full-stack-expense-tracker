@@ -29,7 +29,8 @@ const Authentication = () => {
     setIsSign((prev) => !prev);
   };
 
-  const authHandler = async (endpoint: string, errorMessage: string) => {
+  const authHandler = async (endpoint: string) => {
+    setIsLoading(true)
     const data: Data = {
       fullName: name.current?.value,
       email: email.current?.value,
@@ -52,14 +53,16 @@ const Authentication = () => {
       navigate("/");
     } catch (error: any) {
       setError(error.response.data.message);
+    }finally {
+      setIsLoading(false)
     }
   };
 
   const validateHandler = async () => {
     if (!isSign) {
-      authHandler("/user/sign-up", "Invalid input found.");
+      authHandler("/user/sign-up");
     } else {
-      authHandler("/user/sign-in", "404 User does not exist.");
+      authHandler("/user/sign-in");
     }
   };
 

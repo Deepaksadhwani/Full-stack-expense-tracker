@@ -1,9 +1,6 @@
-import { RootState } from "@/store/appStore";
-import { useSelector } from "react-redux";
 import {
   ChartContainer,
   type ChartConfig,
-  ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis, Tooltip } from "recharts";

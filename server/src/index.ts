@@ -16,5 +16,8 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.get("/", (req,res) => {
+  res.status(200).send("Server is working.")
+})
 app.use("/api/v1", rootRouter);
 app.listen(process.env.PORT || 3000);
