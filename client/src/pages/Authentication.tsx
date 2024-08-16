@@ -123,7 +123,7 @@ const Authentication = () => {
           <p className="font-medium text-red-800">{error}</p>
           <button
             onClick={validateHandler}
-            className="w-[60%] rounded-lg bg-blue-500 p-2 font-Mont font-semibold text-white transition-all duration-300 hover:bg-blue-700 md:w-[75%]"
+            className="w-[40%] rounded-lg bg-blue-500 p-2 font-Mont font-semibold text-white transition-all duration-300 hover:bg-blue-700 lg:w-[75%]"
           >
             {isSign ? "Sign In" : "Sign Up"}
           </button>

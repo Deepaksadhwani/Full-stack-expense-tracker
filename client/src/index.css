@@ -72,7 +72,7 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    
+
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -97,4 +97,8 @@
 
 .dropdown {
   @apply flex items-center justify-center gap-x-2 py-1 transition-all hover:scale-[1.05] hover:text-black;
+}
+
+.mobileButton {
+  @apply flex w-full items-center justify-between gap-x-4  border-gray-500 px-4 py-2 text-left hover:bg-gray-300;
 }

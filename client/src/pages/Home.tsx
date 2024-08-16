@@ -58,7 +58,7 @@ const Home = () => {
           <ExpenseBarChart expenseData={expenseData} />
         </div>
       )}
-      <div className="flex w-full flex-wrap justify-center space-x-10 sm:flex-row">
+      <div className="flex w-full flex-wrap justify-center gap-6 sm:gap-10">
         {expenseData &&
           expenseData.length > 0 &&
           expenseData.map((item: DataType) => (
