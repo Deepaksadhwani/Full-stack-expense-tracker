@@ -223,7 +223,7 @@ const Navbar = () => {
               ⏷
             </div>
             <button
-              onClick={logoutHandler}
+              onClick={checkoutHandler}
               className="flex w-full items-center bg-blue-500 duration-300 transition-all  text-white justify-between gap-x-4  border-gray-500 px-4 py-2 text-left hover:bg-lime-600"
             >
               <span>Buy Premium</span>
